@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package auth.service;
+
+service AuthService {
+  rpc ValidateToken (TokenRequest) returns (TokenResponse) {}
+}
+
+message JwtPayload {
+  string id = 1;
+  string email = 2;
+  string role = 3;
+}
+
+message TokenRequest {
+  string token = 1;
+}
+
+message TokenResponse {
+  JwtPayload payload = 1;
+}
