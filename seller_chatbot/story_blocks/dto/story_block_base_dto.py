@@ -9,5 +9,5 @@ class StoryBlockBaseDto(SQLModel):
   id: Optional[uuid.UUID] = None
   name: Optional[str] = None
   type: StoryBlockType
-  user_id: str
+  user_id: Optional[str] = None
   parent_id: Optional[uuid.UUID] = None
