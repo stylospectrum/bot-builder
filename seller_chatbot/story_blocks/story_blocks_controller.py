@@ -3,7 +3,9 @@ from fastapi import Depends, Request
 from .story_blocks_service import StoryBlocksService
 from .dto.story_block_out_dto import StoryBlockOutDto
 from .dto.create_story_block_dto import CreateStoryBlockDto
-from ..decorators.controller import Controller, Get, Post
+from .dto.delete_story_block_dto import DeleteStoryBlockDto
+from .dto.update_story_block_dto import UpdateStoryBlockDto
+from ..decorators.controller import Controller, Get, Post, Delete, Put
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
 
@@ -25,3 +27,15 @@ class StoryBlocksController:
         create_story_block_dto = create_story_block_dto.model_dump()
         create_story_block_dto['user_id'] = user_id
         return self.story_block_service.create(CreateStoryBlockDto(**create_story_block_dto))
+
+    @Put('/', response_model=StoryBlockOutDto)
+    @validate_token
+    def update(self, request: Request, auth_service_stub: AuthServiceStubDepend, update_story_block_dto: UpdateStoryBlockDto):
+        user_id = request.__dict__['user'].id
+        return self.story_block_service.update(update_story_block_dto, user_id=user_id)
+
+    @Delete('/', response_model=StoryBlockOutDto)
+    @validate_token
+    def delete(self, request: Request, auth_service_stub: AuthServiceStubDepend, delete_story_block_dto: DeleteStoryBlockDto):
+        user_id = request.__dict__['user'].id
+        return self.story_block_service.delete(delete_story_block_dto, user_id=user_id)

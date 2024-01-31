@@ -21,6 +21,12 @@ class StoryBlock(SQLModel, table=True):
         back_populates='children',
         sa_relationship_kwargs=dict(
             remote_side='StoryBlock.id',
+            order_by='StoryBlock.created_at',
         )
     )
-    children: list['StoryBlock'] = Relationship(back_populates='parent')
+    children: list['StoryBlock'] = Relationship(
+        back_populates='parent',
+        sa_relationship_kwargs=dict(
+            order_by='StoryBlock.created_at',
+        )
+    )
