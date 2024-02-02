@@ -16,9 +16,9 @@ class StoryBlocksController:
 
     @Get('/', response_model=StoryBlockOutDto)
     @validate_token
-    def select_by_user_id(self, request: Request, auth_service_stub: AuthServiceStubDepend):
+    def find(self, request: Request, auth_service_stub: AuthServiceStubDepend):
         user_id = request.__dict__['user'].id
-        return self.story_block_service.select_by_user_id(user_id)
+        return self.story_block_service.find(user_id)
 
     @Post('/', response_model=StoryBlockOutDto)
     @validate_token

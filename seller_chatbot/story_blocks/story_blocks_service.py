@@ -29,7 +29,7 @@ class StoryBlocksService:
             r.extend(self.nodes_from_tree(child))
         return r
 
-    def select_by_user_id(self, user_id: str):
+    def find(self, user_id: str):
         story_block = self.session.exec(select(StoryBlock).where(
             StoryBlock.type == StoryBlockType.StartPoint)).first()
 
@@ -48,7 +48,7 @@ class StoryBlocksService:
             self.create_base(
                 CreateStoryBlockDto(user_id=user_id, name='Fallback message', type=StoryBlockType.BotResponse, parent_id=default_fallback_block['id']))
 
-            return self.select_by_user_id(user_id)
+            return self.find(user_id)
 
         return story_block
 
@@ -58,7 +58,7 @@ class StoryBlocksService:
         story_block.name = update_story_block_dto.name
         self.session.add(story_block)
         self.session.commit()
-        return self.select_by_user_id(user_id)
+        return self.find(user_id)
 
     def create(self, create_story_block_dto: CreateStoryBlockDto):
         params = create_story_block_dto.model_dump()
@@ -74,11 +74,10 @@ class StoryBlocksService:
                 self.session.add(block)
                 self.session.commit()
 
-        return self.select_by_user_id(params['user_id'])
+        return self.find(params['user_id'])
 
     def delete(self, delete_story_block_dto: DeleteStoryBlockDto, user_id: str):
-        delete_story_block_dto = delete_story_block_dto.model_dump()
-        id, is_delete_many = delete_story_block_dto.values()
+        id, is_delete_many = delete_story_block_dto.model_dump().values()
         story_block = self.session.exec(
             select(StoryBlock).where(StoryBlock.id == id)).first()
 
@@ -101,4 +100,4 @@ class StoryBlocksService:
         self.session.delete(story_block)
         self.session.commit()
 
-        return self.select_by_user_id(user_id=user_id)
+        return self.find(user_id=user_id)

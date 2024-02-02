@@ -20,6 +20,7 @@ class ResponseInterceptor(BaseHTTPMiddleware):
         204: 'NoContent',
         205: 'ResetContent',
         206: 'PartialContent',
+        404: 'NotFound',
     }
 
     async def dispatch(self, request: Request, call_next):
@@ -30,11 +31,18 @@ class ResponseInterceptor(BaseHTTPMiddleware):
 
         async for chunk in response.body_iterator:
             response_body += chunk
+        
+        response_body = response_body.decode()
+        
+        if response_body:
+            response_body = json.loads(response_body)
+        else:
+            response_body = None
 
         custom_response = {
             "statusCode": status_code,
             "message": message,
-            "data": json.loads(response_body.decode()),
+            "data": response_body,
         }
 
         return JSONResponse(content=custom_response)
