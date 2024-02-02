@@ -23,5 +23,5 @@ app.add_middleware(
 
 
 def start():
-    uvicorn.run("seller_chatbot.main:app",
+    uvicorn.run("bot_builder.main:app",
                 host="0.0.0.0", port=int(settings.PORT), reload=True)
