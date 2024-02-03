@@ -1,8 +1,11 @@
 import uuid
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .bot_response_schema import BotResponse
 
 
 class BotResponseText(SQLModel, table=True):
@@ -14,3 +17,5 @@ class BotResponseText(SQLModel, table=True):
     content: str = Field(nullable=False)
     created_at: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
+    
+    bot_response: Optional['BotResponse'] = Relationship(back_populates="variants")
