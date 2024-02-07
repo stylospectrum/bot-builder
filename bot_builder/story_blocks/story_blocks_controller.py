@@ -5,7 +5,7 @@ from .dto.story_block_out_dto import StoryBlockOutDto
 from .dto.create_story_block_dto import CreateStoryBlockDto
 from .dto.delete_story_block_dto import DeleteStoryBlockDto
 from .dto.update_story_block_dto import UpdateStoryBlockDto
-from ..decorators.controller import Controller, Get, Post, Delete, Put
+from ..core.controller import Controller, Get, Post, Delete, Put
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
 

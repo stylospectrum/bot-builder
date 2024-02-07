@@ -2,15 +2,15 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config.settings import settings
-from .app_module import AppModule
+from .core.core_module import CoreModule
 from .bot_responses.bot_responses_module import BotResponsesModule
 from .story_blocks.story_blocks_module import StoryBlocksModule
 from .postgres.engine import create_db_and_tables
-from .response_interceptor import ResponseInterceptor
+from .interceptors.response_interceptor import ResponseInterceptor
 
 create_db_and_tables()
 
-app = AppModule(modules=[StoryBlocksModule, BotResponsesModule])
+app = CoreModule(modules=[StoryBlocksModule, BotResponsesModule])
 app.add_middleware(ResponseInterceptor)
 
 app.add_middleware(

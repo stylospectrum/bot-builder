@@ -8,6 +8,7 @@ class Settings(BaseSettings):
 
     PORT: Optional[str] = None
     AUTH_SERVICE_URL: Optional[str] = None
+    FILE_SERVICE_URL: Optional[str] = None
 
     POSTGRES_HOST: Optional[str] = None
     POSTGRES_USER: Optional[str] = None

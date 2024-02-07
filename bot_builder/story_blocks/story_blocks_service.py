@@ -8,13 +8,11 @@ from .schemas.story_block_schema import StoryBlock
 from .enum import StoryBlockType
 
 from ..deps.postgres_session import PostgresSessionDepend
-from ..deps.auth_service_stub import AuthServiceStubDepend
 
 
 class StoryBlocksService:
-    def __init__(self, session: PostgresSessionDepend, auth_service_stub: AuthServiceStubDepend):
+    def __init__(self, session: PostgresSessionDepend):
         self.session = session
-        self.auth_service_stub = auth_service_stub
 
     def create_base(self, create_story_block_dto: CreateStoryBlockDto):
         story_block = StoryBlock(**create_story_block_dto.model_dump())

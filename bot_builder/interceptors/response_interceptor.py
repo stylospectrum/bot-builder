@@ -25,15 +25,19 @@ class ResponseInterceptor(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
+
+        if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
+            return response
+
         status_code = response.status_code
         message = self.status_messages.get(status_code, 'Unknown Status Code')
         response_body = b""
 
         async for chunk in response.body_iterator:
             response_body += chunk
-        
+
         response_body = response_body.decode()
-        
+
         if response_body:
             response_body = json.loads(response_body)
         else:

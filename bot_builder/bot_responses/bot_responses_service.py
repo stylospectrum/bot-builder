@@ -8,19 +8,35 @@ from .schemas.bot_response_schema import BotResponse
 from .schemas.bot_response_text_schema import BotResponseText
 from .schemas.bot_response_button_schema import BotResponseButton
 from .dto.create_bot_response_dto import CreateBotResponseDto
+from .dto.bot_response_out_dto import BotResponseOutDto
 
 from ..deps.postgres_session import PostgresSessionDepend
-from ..deps.auth_service_stub import AuthServiceStubDepend
+from ..deps.file_service_stub import FileServiceStubDepend
+from ..proto.file.file_pb2 import CreateFileRequest, GetFileRequest, GetFileResponse, DeleteFileRequest
 
 
 class BotResponsesService:
-    def __init__(self, session: PostgresSessionDepend, auth_service_stub: AuthServiceStubDepend):
+    def __init__(self, session: PostgresSessionDepend, file_service_stub: FileServiceStubDepend):
         self.session = session
-        self.auth_service_stub = auth_service_stub
+        self.file_service_stub = file_service_stub
 
     def find(self, story_block_id: str):
-        return self.session.exec(select(BotResponse).where(
+        result = []
+        bot_responses: list[BotResponse] = self.session.exec(select(BotResponse).where(
             BotResponse.story_block_id == story_block_id).order_by(BotResponse.updated_at)).all()
+
+        for response in bot_responses:
+            out = BotResponseOutDto.model_validate(response)
+
+            if out.type == BotResponseType.Image:
+                res: GetFileResponse = self.file_service_stub.GetFile(
+                    GetFileRequest(owner_id=str(response.id)))
+
+                out.image_url = res.url
+
+            result.append(out)
+
+        return result
 
     def create(self, create_bot_response_dto: list[CreateBotResponseDto]):
         for block in create_bot_response_dto:
@@ -31,7 +47,17 @@ class BotResponsesService:
                     story_block_id=block['story_block_id'], type=block['type'])
                 self.session.add(bot_response)
                 self.session.commit()
-                
+
+            if block['type'] == BotResponseType.Image:
+                bot_response_id = bot_response.id if block['id'] is None else block['id']
+
+                if block['deleted']:
+                    self.file_service_stub.DeleteFile(DeleteFileRequest(
+                        owner_id=str(bot_response_id)))
+                else:
+                    self.file_service_stub.CreateFile(CreateFileRequest(
+                        id=block['image_id'], owner_id=str(bot_response_id), type='image'))
+
             if block['type'] == BotResponseType.QuickReply:
                 if block['id'] is None:
                     for button in block['buttons']:

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter
 
 
-class AppModule(FastAPI):
+class CoreModule(FastAPI):
     def __init__(
             self,
             modules: list,

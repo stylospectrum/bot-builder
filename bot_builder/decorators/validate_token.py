@@ -1,7 +1,7 @@
 from functools import wraps
 
 from fastapi import Request
-from ..proto.auth_pb2 import TokenRequest, TokenResponse
+from ..proto.auth.auth_pb2 import TokenRequest, TokenResponse
 from ..deps.auth_service_stub import AuthServiceStubDepend
 
 

@@ -4,7 +4,7 @@ import grpc
 from typing import Annotated
 from fastapi import Depends
 
-from ..proto.auth_pb2_grpc import AuthServiceStub
+from ..proto.auth.auth_pb2_grpc import AuthServiceStub
 from ..config.settings import settings
 
 

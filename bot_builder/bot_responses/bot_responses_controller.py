@@ -3,7 +3,7 @@ from fastapi import Depends, Request
 from .dto.bot_response_out_dto import BotResponseOutDto
 from .dto.create_bot_response_dto import CreateBotResponseDto
 from .bot_responses_service import BotResponsesService
-from ..decorators.controller import Controller, Get, Post
+from ..core.controller import Controller, Get, Post
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
 

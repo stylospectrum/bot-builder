@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package file.service;
+
+service FileService {
+  rpc CreateFile (CreateFileRequest) returns (CreateFileResponse) {}
+  rpc GetFile (GetFileRequest) returns (GetFileResponse) {}
+  rpc DeleteFile (DeleteFileRequest) returns (DeleteFileResponse) {}
+}
+
+message CreateFileRequest {
+  string id = 1;
+  string type = 2;
+  string owner_id = 3;
+}
+
+message CreateFileResponse {
+  bool success = 1;
+}
+
+message GetFileRequest {
+  string owner_id = 1;
+}
+
+message GetFileResponse {
+  string url = 1;
+}
+
+message DeleteFileRequest {
+  string owner_id = 1;
+}
+
+message DeleteFileResponse {
+  bool success = 1;
+}
