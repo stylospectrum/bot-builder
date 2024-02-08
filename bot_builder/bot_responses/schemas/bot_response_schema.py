@@ -9,6 +9,7 @@ from ..enum import BotResponseType
 if TYPE_CHECKING:
     from .bot_response_text_schema import BotResponseText
     from .bot_response_button_schema import BotResponseButton
+    from .bot_response_gallery_item_schema import BotResponseGalleryItem
 
 
 class BotResponse(SQLModel, table=True):
@@ -22,6 +23,11 @@ class BotResponse(SQLModel, table=True):
         default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
+    
+    gallery: Optional[list['BotResponseGalleryItem']] = Relationship(
+        back_populates="bot_response", sa_relationship_kwargs=dict(
+            order_by='BotResponseGalleryItem.updated_at',
+        ))
 
     variants: Optional[list['BotResponseText']] = Relationship(
         back_populates="bot_response", sa_relationship_kwargs=dict(
