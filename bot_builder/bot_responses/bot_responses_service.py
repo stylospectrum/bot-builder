@@ -35,17 +35,26 @@ class BotResponsesService:
 
                 out.image_url = res.url
 
+            if out.type == BotResponseType.Gallery:
+                out.gallery = [item.model_dump() for item in out.gallery]
+
+                for gallery_item in out.gallery:
+                    res: GetFileResponse = self.file_service_stub.GetFile(
+                        GetFileRequest(owner_id=str(gallery_item['id'])))
+
+                    gallery_item['image_url'] = res.url
+
             result.append(out)
 
         return result
 
-    def handle_image_block(self, block, bot_response: BotResponse):
+    def handle_image_block(self, block, owner_id: str):
         if block['deleted']:
             self.file_service_stub.DeleteFile(
-                DeleteFileRequest(owner_id=str(bot_response.id)))
+                DeleteFileRequest(owner_id=str(owner_id)))
         else:
             self.file_service_stub.CreateFile(CreateFileRequest(
-                id=block['image_id'], owner_id=str(bot_response.id), type='image'))
+                id=block['image_id'], owner_id=str(owner_id), type='image'))
 
     def handle_gallery_block(self, block, bot_response):
         if block['deleted']:
@@ -81,6 +90,8 @@ class BotResponsesService:
             BotResponseGalleryItem).where(BotResponseGalleryItem.bot_response_id == bot_response_id)).all()}
 
         for gallery_item_raw in gallery_raw:
+            gallery_item_id = gallery_item_raw['id']
+
             if gallery_item_raw.get('deleted', False):
                 if gallery_item_raw['id'] in existing_gallery_items:
                     self.session.exec(delete(BotResponseButton).where(
@@ -97,6 +108,7 @@ class BotResponsesService:
                 self.session.commit()
                 self.add_or_update_buttons(gallery_item_raw.get(
                     'buttons', []), new_gallery_item.id, 'GalleryItem')
+                gallery_item_id = new_gallery_item.id
             else:
                 if gallery_item_raw['id'] in existing_gallery_items:
                     existing_item = existing_gallery_items[gallery_item_raw['id']]
@@ -105,7 +117,7 @@ class BotResponsesService:
                     existing_item.updated_at = datetime.utcnow()
                     self.add_or_update_buttons(gallery_item_raw.get(
                         'buttons', []), gallery_item_raw['id'], 'GalleryItem')
-
+            self.handle_image_block(gallery_item_raw, gallery_item_id)
         self.session.commit()
 
     def handle_quick_reply_block(self, block, bot_response):
@@ -117,7 +129,7 @@ class BotResponsesService:
             self.add_or_update_buttons(
                 block['buttons'], bot_response.id, 'QuickReply')
 
-    def add_or_update_buttons(self, buttons_raw, parent_id, parent_type):
+    def add_or_update_buttons(self, buttons_raw, parent_id: str, parent_type):
         for button_raw in buttons_raw:
             if button_raw['id'] is None:
                 button = BotResponseButton(
@@ -189,7 +201,7 @@ class BotResponsesService:
             bot_response = self.get_or_create_bot_response(block)
 
             if block['type'] == BotResponseType.Image:
-                self.handle_image_block(block, bot_response)
+                self.handle_image_block(block, bot_response.id)
             elif block['type'] == BotResponseType.Gallery:
                 self.handle_gallery_block(block, bot_response)
             elif block['type'] == BotResponseType.QuickReply:

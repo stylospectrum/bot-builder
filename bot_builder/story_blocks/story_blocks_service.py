@@ -1,4 +1,4 @@
-from sqlmodel import select
+from sqlmodel import select, delete
 
 from .dto.create_story_block_dto import CreateStoryBlockDto
 from .dto.update_story_block_dto import UpdateStoryBlockDto
@@ -26,6 +26,9 @@ class StoryBlocksService:
         for child in parent.children:
             r.extend(self.nodes_from_tree(child))
         return r
+    
+    def find_by_id(self, id: str):
+        return self.session.exec(select(StoryBlock).where(StoryBlock.id == id)).first()
 
     def find(self, user_id: str):
         story_block = self.session.exec(select(StoryBlock).where(
@@ -56,7 +59,8 @@ class StoryBlocksService:
         story_block.name = update_story_block_dto.name
         self.session.add(story_block)
         self.session.commit()
-        return self.find(user_id)
+        self.session.refresh(story_block)
+        return story_block
 
     def create(self, create_story_block_dto: CreateStoryBlockDto):
         params = create_story_block_dto.model_dump()
@@ -84,11 +88,8 @@ class StoryBlocksService:
                 StoryBlockOutDto.model_validate(story_block))
             list_id.pop(0)
 
-            for item_id in list_id:
-                sub_story_block = self.session.exec(
-                    select(StoryBlock).where(StoryBlock.id == item_id)).first()
-                self.session.delete(sub_story_block)
-                self.session.commit()
+            self.session.exec(delete(StoryBlock).where(StoryBlock.id.in_(list_id)))
+            self.session.commit()
         else:
             for sub_story_block in story_block.children:
                 sub_story_block.parent_id = story_block.parent_id
