@@ -31,8 +31,7 @@ class StoryBlocksController:
     @Put('/', response_model=StoryBlockOutDto)
     @validate_token
     def update(self, request: Request, auth_service_stub: AuthServiceStubDepend, update_story_block_dto: UpdateStoryBlockDto):
-        user_id = request.__dict__['user'].id
-        return self.story_block_service.update(update_story_block_dto, user_id=user_id)
+        return self.story_block_service.update(update_story_block_dto)
 
     @Delete('/', response_model=StoryBlockOutDto)
     @validate_token

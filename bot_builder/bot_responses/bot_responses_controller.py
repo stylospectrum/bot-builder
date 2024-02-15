@@ -7,7 +7,6 @@ from ..core.controller import Controller, Get, Post
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
 from ..story_blocks.story_blocks_service import StoryBlocksService
-from ..story_blocks.dto.story_block_out_dto import StoryBlockOutDto
 
 
 @Controller('story-block/bot-response')
@@ -18,30 +17,32 @@ class BotResponsesController:
     @Get('/{story_block_id}/')
     @validate_token
     def find(self, request: Request, auth_service_stub: AuthServiceStubDepend, story_block_id: str):
-        bot_response = self.bot_response_service.find(story_block_id)
-        bot_response = [BotResponseOutDto.model_validate(response) for response in bot_response]
+        bot_responses = self.bot_response_service.find(story_block_id)
+        bot_responses = [BotResponseOutDto.model_validate(response) for response in bot_responses]
         story_block = self.story_block_service.find_by_id(story_block_id)
 
         return {
             "story_block": story_block,
-            "bot_response": bot_response
+            "bot_responses": bot_responses
         }
 
 
     @Post('/')
     @validate_token
     def create(self, request: Request, auth_service_stub: AuthServiceStubDepend, mixed: CreateBotResponseAndUpdateStoryBlockDto):
-        user_id = request.__dict__['user'].id
         story_block = None
-        bot_response = []
+        bot_responses = False
 
         if mixed.story_block.id:
-            story_block = self.story_block_service.update(mixed.story_block, user_id)
+            story_block = self.story_block_service.update(mixed.story_block)
 
         if len(mixed.bot_responses) > 0:
-            bot_response = self.bot_response_service.create(mixed.bot_responses)
-
+            bot_responses = self.bot_response_service.create(mixed.bot_responses)
+    
         return {
-            "story_block": story_block,
-            "bot_response": bot_response
+            "story_block": {
+                'id': story_block.id if story_block else '',
+                'name': story_block.name if story_block else '',
+            },
+            "bot_responses": bot_responses
         }

@@ -53,7 +53,7 @@ class StoryBlocksService:
 
         return story_block
 
-    def update(self, update_story_block_dto: UpdateStoryBlockDto, user_id: str):
+    def update(self, update_story_block_dto: UpdateStoryBlockDto):
         story_block = self.session.exec(
             select(StoryBlock).where(StoryBlock.id == update_story_block_dto.id)).first()
         story_block.name = update_story_block_dto.name

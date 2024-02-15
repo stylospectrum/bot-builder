@@ -5,12 +5,13 @@ from .config.settings import settings
 from .core.core_module import CoreModule
 from .bot_responses.bot_responses_module import BotResponsesModule
 from .story_blocks.story_blocks_module import StoryBlocksModule
+from .user_inputs.user_inputs_module import UserInputsModule
 from .postgres.engine import create_db_and_tables
 from .interceptors.response_interceptor import ResponseInterceptor
 
 create_db_and_tables()
 
-app = CoreModule(modules=[StoryBlocksModule, BotResponsesModule])
+app = CoreModule(modules=[StoryBlocksModule, BotResponsesModule, UserInputsModule])
 app.add_middleware(ResponseInterceptor)
 
 app.add_middleware(
