@@ -1,4 +1,6 @@
-from sqlmodel import select, delete
+from sqlmodel import select, delete, and_
+from fastapi import Depends
+from typing import Annotated
 
 from .dto.create_story_block_dto import CreateStoryBlockDto
 from .dto.update_story_block_dto import UpdateStoryBlockDto
@@ -8,10 +10,16 @@ from .schemas.story_block_schema import StoryBlock
 from .enum import StoryBlockType
 
 from ..deps.postgres_session import PostgresSessionDepend
+from ..bot_responses.bot_responses_service import BotResponsesService
+from ..bot_responses.dto.create_bot_response_dto import CreateBotResponseDto
+from ..bot_responses.dto.bot_response_base_dto import BotResponseTextDto
+from ..bot_responses.enum import BotResponseType
 
 
 class StoryBlocksService:
-    def __init__(self, session: PostgresSessionDepend):
+    def __init__(self, session: PostgresSessionDepend, bot_responses_service: Annotated[BotResponsesService, Depends(
+            BotResponsesService)]):
+        self.bot_responses_service = bot_responses_service
         self.session = session
 
     def create_base(self, create_story_block_dto: CreateStoryBlockDto):
@@ -26,28 +34,45 @@ class StoryBlocksService:
         for child in parent.children:
             r.extend(self.nodes_from_tree(child))
         return r
-    
+
     def find_by_id(self, id: str):
         return self.session.exec(select(StoryBlock).where(StoryBlock.id == id)).first()
 
     def find(self, user_id: str):
         story_block = self.session.exec(select(StoryBlock).where(
-            StoryBlock.type == StoryBlockType.StartPoint)).first()
+            and_(StoryBlock.type == StoryBlockType.StartPoint, StoryBlock.user_id == user_id))).first()
+
+        welcome_msgs = [
+            BotResponseTextDto(content='Hello'),
+            BotResponseTextDto(content='Hi'),
+            BotResponseTextDto(content='What can I do for you?'),
+            BotResponseTextDto(content='Have a great day!')
+        ]
+
+        fallback_msgs = [
+            BotResponseTextDto(content='One more time?'),
+            BotResponseTextDto(content='What was that?'),
+            BotResponseTextDto(
+                content='I missed what you said. Say it again?'),
+            BotResponseTextDto(content='I don\'t understand, can you repeat?')
+        ]
 
         if not story_block:
             start_point_block = self.create_base(
                 CreateStoryBlockDto(user_id=user_id, type=StoryBlockType.StartPoint))
-            start_point_block = start_point_block.model_dump()
 
-            self.create_base(
-                CreateStoryBlockDto(user_id=user_id, name='Welcome message', type=StoryBlockType.BotResponse, parent_id=start_point_block['id']))
+            welcome_msg_block = self.create_base(
+                CreateStoryBlockDto(user_id=user_id, name='Welcome message', type=StoryBlockType.BotResponse, parent_id=start_point_block.id))
 
             default_fallback_block = self.create_base(
-                CreateStoryBlockDto(user_id=user_id, type=StoryBlockType.DefaultFallback, parent_id=start_point_block['id']))
-            default_fallback_block = default_fallback_block.model_dump()
+                CreateStoryBlockDto(user_id=user_id, type=StoryBlockType.DefaultFallback, parent_id=start_point_block.id))
 
-            self.create_base(
-                CreateStoryBlockDto(user_id=user_id, name='Fallback message', type=StoryBlockType.BotResponse, parent_id=default_fallback_block['id']))
+            fallback_msg_block = self.create_base(
+                CreateStoryBlockDto(user_id=user_id, name='Fallback message', type=StoryBlockType.BotResponse, parent_id=default_fallback_block.id))
+
+            self.bot_responses_service.create([CreateBotResponseDto(story_block_id=fallback_msg_block.id, variants=fallback_msgs, type=BotResponseType.RandomText),
+                                               CreateBotResponseDto(story_block_id=welcome_msg_block.id, variants=welcome_msgs,
+                                                                    type=BotResponseType.RandomText),])
 
             return self.find(user_id)
 
@@ -88,7 +113,8 @@ class StoryBlocksService:
                 StoryBlockOutDto.model_validate(story_block))
             list_id.pop(0)
 
-            self.session.exec(delete(StoryBlock).where(StoryBlock.id.in_(list_id)))
+            self.session.exec(delete(StoryBlock).where(
+                StoryBlock.id.in_(list_id)))
             self.session.commit()
         else:
             for sub_story_block in story_block.children:

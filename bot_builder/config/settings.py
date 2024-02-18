@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
     PORT: Optional[str] = None
+    SERVICE_URL: Optional[str] = None
     AUTH_SERVICE_URL: Optional[str] = None
     FILE_SERVICE_URL: Optional[str] = None
 
