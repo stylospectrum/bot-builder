@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package bot_builder.service;
+package bot_builder_story.service;
 
-service BotBuilderService {
+service BotBuilderStoryService {
   rpc GetStoryBlocks(GetStoryBlocksRequest) returns (StoryBlock);
   rpc GetBotResponses(GetBotResponsesRequest) returns (GetBotResponsesResponse);
 }
