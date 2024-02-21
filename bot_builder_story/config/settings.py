@@ -6,8 +6,9 @@ from typing import Any, Optional
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
-    PORT: Optional[str] = None
-    SERVICE_URL: Optional[str] = None
+    HTTP_PORT: Optional[str] = None
+    GRPC_PORT: Optional[str] = None
+    BOT_BUILDER_NLP_SERVICE_URL: Optional[str] = None
     AUTH_SERVICE_URL: Optional[str] = None
     FILE_SERVICE_URL: Optional[str] = None
 

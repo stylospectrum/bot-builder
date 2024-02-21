@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package bot_builder_nlp.service;
+
+service BotBuilderNlpService {
+  rpc UpsertEmbedding(UpsertEmbeddingRequest) returns (UpsertEmbeddingResponse);
+  rpc DeleteEmbedding(DeleteEmbeddingRequest) returns (DeleteEmbeddingResponse);
+  rpc GetStoryBlockId(GetStoryBlockIdRequest) returns (GetStoryBlockIdResponse);
+}
+
+message UserInput {
+  string id = 1;
+  string content = 2;
+  string story_block_id = 3;
+}
+
+message UpsertEmbeddingRequest {
+  repeated UserInput user_inputs = 1;
+}
+
+message UpsertEmbeddingResponse {
+  bool success = 1;
+}
+
+message DeleteEmbeddingRequest {
+  repeated string ids = 1;
+}
+
+message DeleteEmbeddingResponse {
+  bool success = 1;
+}
+
+message GetStoryBlockIdRequest {
+  string user_input = 1;
+}
+
+message GetStoryBlockIdResponse {
+  string story_block_id = 1;
+}
