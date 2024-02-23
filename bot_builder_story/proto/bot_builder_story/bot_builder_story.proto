@@ -28,7 +28,22 @@ message GetBotResponsesResponse {
   repeated BotResponse responses = 1;
 }
 
+message BotResponseButton {
+  string content = 1;
+  string go_to = 2;
+}
+
+message BotResponseGalleryItem {
+  string img_url = 1;
+  string title = 2;
+  string description = 3;
+  repeated BotResponseButton buttons = 4;
+}
+
 message BotResponse {
   string type = 1;
   repeated string variants = 2;
+  string img_url = 3;
+  repeated BotResponseButton buttons = 4;
+  repeated BotResponseGalleryItem gallery = 5;
 }

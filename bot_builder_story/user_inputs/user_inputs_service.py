@@ -18,7 +18,7 @@ class UserInputsService:
         return self.session.exec(select(UserInput).where(
             UserInput.story_block_id == story_block_id).order_by(UserInput.created_at)).all()
 
-    def create(self, user_inputs_raw: list[CreateUserInputDto]):
+    def create(self, user_inputs_raw: list[CreateUserInputDto], user_id: str):
         user_inputs = []
 
         for user_input_raw in user_inputs_raw:
@@ -45,7 +45,8 @@ class UserInputsService:
 
         if len(user_inputs) > 0:
             self.bot_builder_nlp_service_stub.UpsertEmbedding(
-                UpsertEmbeddingRequest(user_inputs=[{'id': str(user_input.id), 'content': user_input.content, 'story_block_id': str(user_input.story_block_id)} for user_input in user_inputs]))
+                UpsertEmbeddingRequest(user_id=user_id,
+                                       user_inputs=[{'id': str(user_input.id), 'content': user_input.content, 'story_block_id': str(user_input.story_block_id)} for user_input in user_inputs]))
             self.session.add_all(user_inputs)
 
         self.session.commit()

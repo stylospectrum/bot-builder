@@ -8,7 +8,7 @@ from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
 
 
-@Controller('story-block/user-input')
+@Controller('user-input')
 class UserInputsController:
     user_input_service: UserInputsService = Depends(UserInputsService)
     story_block_service: StoryBlocksService = Depends(StoryBlocksService)
@@ -27,6 +27,7 @@ class UserInputsController:
     @Post('/')
     @validate_token
     def create(self, request: Request, auth_service_stub: AuthServiceStubDepend, create_user_input_dto: CreateUserInputDto):
+        user_id = request.__dict__['user'].id
         story_block = None
         user_inputs = False
 
@@ -34,7 +35,7 @@ class UserInputsController:
             story_block = self.story_block_service.update(create_user_input_dto.story_block)
 
         if len(create_user_input_dto.user_inputs) > 0:
-            user_inputs = self.user_input_service.create(create_user_input_dto.user_inputs)
+            user_inputs = self.user_input_service.create(create_user_input_dto.user_inputs, user_id)
     
         return {
             "story_block": {

@@ -20,6 +20,7 @@ class BotResponseTextDto(SQLModel):
 class BotResponseGalleryItemDto(SQLModel):
     id: Optional[uuid.UUID] = None
     image_id: Optional[str] = None
+    image_url: Optional[str] = None
     title: Optional[str] = None
     description: Optional[str] = None
     buttons: Optional[list[BotResponseButtonDto]] = None

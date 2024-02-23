@@ -1,7 +1,7 @@
 from fastapi import Depends, Request
 
 from .dto.bot_response_out_dto import BotResponseOutDto
-from .dto.create_bot_response_dto import CreateBotResponseAndUpdateStoryBlockDto
+from .dto.create_bot_response_dto import CreateBotResponseDto
 from .bot_responses_service import BotResponsesService
 from ..core.controller import Controller, Get, Post
 from ..decorators.validate_token import validate_token
@@ -9,7 +9,7 @@ from ..deps.auth_service_stub import AuthServiceStubDepend
 from ..story_blocks.story_blocks_service import StoryBlocksService
 
 
-@Controller('story-block/bot-response')
+@Controller('bot-response')
 class BotResponsesController:
     story_block_service: StoryBlocksService = Depends(StoryBlocksService)
     bot_response_service: BotResponsesService = Depends(BotResponsesService)
@@ -29,15 +29,15 @@ class BotResponsesController:
 
     @Post('/')
     @validate_token
-    def create(self, request: Request, auth_service_stub: AuthServiceStubDepend, mixed: CreateBotResponseAndUpdateStoryBlockDto):
+    def create(self, request: Request, auth_service_stub: AuthServiceStubDepend, create_bot_response_dto: CreateBotResponseDto):
         story_block = None
         bot_responses = False
 
-        if mixed.story_block.id:
-            story_block = self.story_block_service.update(mixed.story_block)
+        if create_bot_response_dto.story_block.id:
+            story_block = self.story_block_service.update(create_bot_response_dto.story_block)
 
-        if len(mixed.bot_responses) > 0:
-            bot_responses = self.bot_response_service.create(mixed.bot_responses)
+        if len(create_bot_response_dto.bot_responses) > 0:
+            bot_responses = self.bot_response_service.create(create_bot_response_dto.bot_responses)
     
         return {
             "story_block": {

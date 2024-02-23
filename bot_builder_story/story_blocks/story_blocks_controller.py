@@ -8,11 +8,12 @@ from .dto.update_story_block_dto import UpdateStoryBlockDto
 from ..core.controller import Controller, Get, Post, Delete, Put
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
-
+from ..bot_responses.bot_responses_service import BotResponsesService
 
 @Controller('story-block')
 class StoryBlocksController:
     story_block_service: StoryBlocksService = Depends(StoryBlocksService)
+    bot_response_service: BotResponsesService = Depends(BotResponsesService)
 
     @Get('/', response_model=StoryBlockOutDto)
     @validate_token
@@ -37,4 +38,5 @@ class StoryBlocksController:
     @validate_token
     def delete(self, request: Request, auth_service_stub: AuthServiceStubDepend, delete_story_block_dto: DeleteStoryBlockDto):
         user_id = request.__dict__['user'].id
+        self.bot_response_service.delete(delete_story_block_dto.id)
         return self.story_block_service.delete(delete_story_block_dto, user_id=user_id)

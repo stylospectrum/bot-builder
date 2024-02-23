@@ -39,10 +39,36 @@ class GetBotResponsesResponse(_message.Message):
     responses: _containers.RepeatedCompositeFieldContainer[BotResponse]
     def __init__(self, responses: _Optional[_Iterable[_Union[BotResponse, _Mapping]]] = ...) -> None: ...
 
+class BotResponseButton(_message.Message):
+    __slots__ = ("content", "go_to")
+    CONTENT_FIELD_NUMBER: _ClassVar[int]
+    GO_TO_FIELD_NUMBER: _ClassVar[int]
+    content: str
+    go_to: str
+    def __init__(self, content: _Optional[str] = ..., go_to: _Optional[str] = ...) -> None: ...
+
+class BotResponseGalleryItem(_message.Message):
+    __slots__ = ("img_url", "title", "description", "buttons")
+    IMG_URL_FIELD_NUMBER: _ClassVar[int]
+    TITLE_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
+    BUTTONS_FIELD_NUMBER: _ClassVar[int]
+    img_url: str
+    title: str
+    description: str
+    buttons: _containers.RepeatedCompositeFieldContainer[BotResponseButton]
+    def __init__(self, img_url: _Optional[str] = ..., title: _Optional[str] = ..., description: _Optional[str] = ..., buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ...) -> None: ...
+
 class BotResponse(_message.Message):
-    __slots__ = ("type", "variants")
+    __slots__ = ("type", "variants", "img_url", "buttons", "gallery")
     TYPE_FIELD_NUMBER: _ClassVar[int]
     VARIANTS_FIELD_NUMBER: _ClassVar[int]
+    IMG_URL_FIELD_NUMBER: _ClassVar[int]
+    BUTTONS_FIELD_NUMBER: _ClassVar[int]
+    GALLERY_FIELD_NUMBER: _ClassVar[int]
     type: str
     variants: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, type: _Optional[str] = ..., variants: _Optional[_Iterable[str]] = ...) -> None: ...
+    img_url: str
+    buttons: _containers.RepeatedCompositeFieldContainer[BotResponseButton]
+    gallery: _containers.RepeatedCompositeFieldContainer[BotResponseGalleryItem]
+    def __init__(self, type: _Optional[str] = ..., variants: _Optional[_Iterable[str]] = ..., img_url: _Optional[str] = ..., buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ..., gallery: _Optional[_Iterable[_Union[BotResponseGalleryItem, _Mapping]]] = ...) -> None: ...

@@ -1,5 +1,3 @@
-import uuid
-
 from sqlmodel import select, delete
 from datetime import datetime
 
@@ -8,7 +6,7 @@ from .schemas.bot_response_schema import BotResponse
 from .schemas.bot_response_text_schema import BotResponseText
 from .schemas.bot_response_button_schema import BotResponseButton
 from .schemas.bot_response_gallery_item_schema import BotResponseGalleryItem
-from .dto.create_bot_response_dto import CreateBotResponseDto
+from .dto.create_bot_response_dto import CreateBotResponseBaseDto
 from .dto.bot_response_out_dto import BotResponseOutDto
 
 from ..deps.postgres_session import PostgresSessionDepend
@@ -26,25 +24,25 @@ class BotResponsesService:
         bot_responses: list[BotResponse] = self.session.exec(select(BotResponse).where(
             BotResponse.story_block_id == story_block_id).order_by(BotResponse.updated_at)).all()
 
-        for response in bot_responses:
-            out = BotResponseOutDto.model_validate(response)
+        for bot_response in bot_responses:
+            bot_response_out = BotResponseOutDto.model_validate(bot_response)
 
-            if out.type == BotResponseType.Image:
-                res: GetFileResponse = self.file_service_stub.GetFile(
-                    GetFileRequest(owner_id=str(response.id)))
+            if bot_response_out.type == BotResponseType.Image:
+                file_response: GetFileResponse = self.file_service_stub.GetFile(
+                    GetFileRequest(owner_id=str(bot_response.id)))
 
-                out.image_url = res.url
+                bot_response_out.image_url = file_response.url
 
-            if out.type == BotResponseType.Gallery:
-                out.gallery = [item.model_dump() for item in out.gallery]
+            if bot_response_out.type == BotResponseType.Gallery:
+                bot_response_out.gallery = [item.model_dump() for item in bot_response_out.gallery]
 
-                for gallery_item in out.gallery:
-                    res: GetFileResponse = self.file_service_stub.GetFile(
+                for gallery_item in bot_response_out.gallery:
+                    file_response: GetFileResponse = self.file_service_stub.GetFile(
                         GetFileRequest(owner_id=str(gallery_item['id'])))
 
-                    gallery_item['image_url'] = res.url
+                    gallery_item['image_url'] = file_response.url
 
-            result.append(out)
+            result.append(bot_response_out)
 
         return result
 
@@ -195,7 +193,7 @@ class BotResponsesService:
             bot_response.updated_at = datetime.utcnow()
         self.session.commit()
 
-    def create(self, create_bot_response_dto: list[CreateBotResponseDto]):
+    def create(self, create_bot_response_dto: list[CreateBotResponseBaseDto]):
         for block in create_bot_response_dto:
             block = block.model_dump()
             bot_response = self.get_or_create_bot_response(block)
@@ -211,4 +209,15 @@ class BotResponsesService:
                 self.handle_text_variants_block(block, bot_response)
 
             self.finalize_bot_response(block, bot_response)
+        return True
+
+    def delete(self, story_block_id: str):
+        bot_response = self.session.exec(select(BotResponse).where(
+            BotResponse.story_block_id == story_block_id)).first()
+        
+        if bot_response:
+            self.session.exec(delete(BotResponseText).where(BotResponseText.bot_response_id == bot_response.id))
+            self.session.delete(bot_response)
+            self.session.commit()
+        
         return True

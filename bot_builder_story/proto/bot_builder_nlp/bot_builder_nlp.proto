@@ -15,7 +15,8 @@ message UserInput {
 }
 
 message UpsertEmbeddingRequest {
-  repeated UserInput user_inputs = 1;
+  string user_id = 1;
+  repeated UserInput user_inputs = 2;
 }
 
 message UpsertEmbeddingResponse {
@@ -31,7 +32,8 @@ message DeleteEmbeddingResponse {
 }
 
 message GetStoryBlockIdRequest {
-  string user_input = 1;
+  string user_id = 1;
+  string user_input = 2;
 }
 
 message GetStoryBlockIdResponse {

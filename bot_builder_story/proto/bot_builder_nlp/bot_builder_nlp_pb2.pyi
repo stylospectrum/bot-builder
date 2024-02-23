@@ -16,10 +16,12 @@ class UserInput(_message.Message):
     def __init__(self, id: _Optional[str] = ..., content: _Optional[str] = ..., story_block_id: _Optional[str] = ...) -> None: ...
 
 class UpsertEmbeddingRequest(_message.Message):
-    __slots__ = ("user_inputs",)
+    __slots__ = ("user_id", "user_inputs")
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
     USER_INPUTS_FIELD_NUMBER: _ClassVar[int]
+    user_id: str
     user_inputs: _containers.RepeatedCompositeFieldContainer[UserInput]
-    def __init__(self, user_inputs: _Optional[_Iterable[_Union[UserInput, _Mapping]]] = ...) -> None: ...
+    def __init__(self, user_id: _Optional[str] = ..., user_inputs: _Optional[_Iterable[_Union[UserInput, _Mapping]]] = ...) -> None: ...
 
 class UpsertEmbeddingResponse(_message.Message):
     __slots__ = ("success",)
@@ -40,10 +42,12 @@ class DeleteEmbeddingResponse(_message.Message):
     def __init__(self, success: bool = ...) -> None: ...
 
 class GetStoryBlockIdRequest(_message.Message):
-    __slots__ = ("user_input",)
+    __slots__ = ("user_id", "user_input")
+    USER_ID_FIELD_NUMBER: _ClassVar[int]
     USER_INPUT_FIELD_NUMBER: _ClassVar[int]
+    user_id: str
     user_input: str
-    def __init__(self, user_input: _Optional[str] = ...) -> None: ...
+    def __init__(self, user_id: _Optional[str] = ..., user_input: _Optional[str] = ...) -> None: ...
 
 class GetStoryBlockIdResponse(_message.Message):
     __slots__ = ("story_block_id",)

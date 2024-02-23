@@ -11,7 +11,7 @@ from .enum import StoryBlockType
 
 from ..deps.postgres_session import PostgresSessionDepend
 from ..bot_responses.bot_responses_service import BotResponsesService
-from ..bot_responses.dto.create_bot_response_dto import CreateBotResponseDto
+from ..bot_responses.dto.create_bot_response_dto import CreateBotResponseBaseDto
 from ..bot_responses.dto.bot_response_base_dto import BotResponseTextDto
 from ..bot_responses.enum import BotResponseType
 
@@ -70,8 +70,8 @@ class StoryBlocksService:
             fallback_msg_block = self.create_base(
                 CreateStoryBlockDto(user_id=user_id, name='Fallback message', type=StoryBlockType.BotResponse, parent_id=default_fallback_block.id))
 
-            self.bot_responses_service.create([CreateBotResponseDto(story_block_id=fallback_msg_block.id, variants=fallback_msgs, type=BotResponseType.RandomText),
-                                               CreateBotResponseDto(story_block_id=welcome_msg_block.id, variants=welcome_msgs,
+            self.bot_responses_service.create([CreateBotResponseBaseDto(story_block_id=fallback_msg_block.id, variants=fallback_msgs, type=BotResponseType.RandomText),
+                                               CreateBotResponseBaseDto(story_block_id=welcome_msg_block.id, variants=welcome_msgs,
                                                                     type=BotResponseType.RandomText),])
 
             return self.find(user_id)

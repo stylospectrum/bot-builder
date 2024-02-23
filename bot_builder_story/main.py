@@ -52,4 +52,4 @@ app.add_middleware(
 
 def start():
     uvicorn.run("bot_builder_story.main:app",
-                host="0.0.0.0", port=int(settings.HTTP_PORT), reload=True)
+                host="0.0.0.0", port=int(settings.PORT), reload=True)
