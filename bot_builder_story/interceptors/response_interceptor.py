@@ -7,20 +7,20 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 class ResponseInterceptor(BaseHTTPMiddleware):
     def __init__(
-            self,
-            app,
+        self,
+        app,
     ):
         super().__init__(app)
 
     status_messages = {
-        200: 'OK',
-        201: 'Created',
-        202: 'Accepted',
-        203: 'NonAuthoritativeInfo',
-        204: 'NoContent',
-        205: 'ResetContent',
-        206: 'PartialContent',
-        404: 'NotFound',
+        200: "OK",
+        201: "Created",
+        202: "Accepted",
+        203: "NonAuthoritativeInfo",
+        204: "NoContent",
+        205: "ResetContent",
+        206: "PartialContent",
+        404: "NotFound",
     }
 
     async def dispatch(self, request: Request, call_next):
@@ -30,7 +30,7 @@ class ResponseInterceptor(BaseHTTPMiddleware):
             return response
 
         status_code = response.status_code
-        message = self.status_messages.get(status_code, 'Unknown Status Code')
+        message = self.status_messages.get(status_code, "Unknown Status Code")
         response_body = b""
 
         async for chunk in response.body_iterator:

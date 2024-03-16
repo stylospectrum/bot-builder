@@ -49,7 +49,7 @@ def Controller(tag: str = None, prefix: str = None):
 
 def Get(path: str = None, **kwargs):
     if path is None:
-        path = '/'
+        path = "/"
 
     def decorator(func):
         func.method = "GET"
@@ -62,7 +62,7 @@ def Get(path: str = None, **kwargs):
 
 def Post(path: str = None, **kwargs):
     if path is None:
-        path = '/'
+        path = "/"
 
     def decorator(func):
         func.method = "POST"

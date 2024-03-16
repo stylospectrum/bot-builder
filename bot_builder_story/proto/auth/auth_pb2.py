@@ -7,26 +7,27 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\x12\x0c\x61uth.service\"5\n\nJwtPayload\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x01(\t\"\x1d\n\x0cTokenRequest\x12\r\n\x05token\x18\x01 \x01(\t\":\n\rTokenResponse\x12)\n\x07payload\x18\x01 \x01(\x0b\x32\x18.auth.service.JwtPayload2Y\n\x0b\x41uthService\x12J\n\rValidateToken\x12\x1a.auth.service.TokenRequest\x1a\x1b.auth.service.TokenResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\nauth.proto\x12\x0c\x61uth.service"5\n\nJwtPayload\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x0c\n\x04role\x18\x03 \x01(\t"\x1d\n\x0cTokenRequest\x12\r\n\x05token\x18\x01 \x01(\t":\n\rTokenResponse\x12)\n\x07payload\x18\x01 \x01(\x0b\x32\x18.auth.service.JwtPayload2Y\n\x0b\x41uthService\x12J\n\rValidateToken\x12\x1a.auth.service.TokenRequest\x1a\x1b.auth.service.TokenResponse"\x00\x62\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "auth_pb2", _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  _globals['_JWTPAYLOAD']._serialized_start=28
-  _globals['_JWTPAYLOAD']._serialized_end=81
-  _globals['_TOKENREQUEST']._serialized_start=83
-  _globals['_TOKENREQUEST']._serialized_end=112
-  _globals['_TOKENRESPONSE']._serialized_start=114
-  _globals['_TOKENRESPONSE']._serialized_end=172
-  _globals['_AUTHSERVICE']._serialized_start=174
-  _globals['_AUTHSERVICE']._serialized_end=263
+    DESCRIPTOR._options = None
+    _globals["_JWTPAYLOAD"]._serialized_start = 28
+    _globals["_JWTPAYLOAD"]._serialized_end = 81
+    _globals["_TOKENREQUEST"]._serialized_start = 83
+    _globals["_TOKENREQUEST"]._serialized_end = 112
+    _globals["_TOKENRESPONSE"]._serialized_start = 114
+    _globals["_TOKENRESPONSE"]._serialized_end = 172
+    _globals["_AUTHSERVICE"]._serialized_start = 174
+    _globals["_AUTHSERVICE"]._serialized_end = 263
 # @@protoc_insertion_point(module_scope)

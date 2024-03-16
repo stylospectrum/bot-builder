@@ -12,7 +12,12 @@ class CreateFileRequest(_message.Message):
     id: str
     type: str
     owner_id: str
-    def __init__(self, id: _Optional[str] = ..., type: _Optional[str] = ..., owner_id: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        id: _Optional[str] = ...,
+        type: _Optional[str] = ...,
+        owner_id: _Optional[str] = ...,
+    ) -> None: ...
 
 class CreateFileResponse(_message.Message):
     __slots__ = ("success",)

@@ -1,16 +1,16 @@
 from fastapi import Depends, Request
 
-from .user_inputs_service import UserInputsService
+from .filters_service import FiltersService
 from ..story_blocks.story_blocks_service import StoryBlocksService
-from .dto.create_user_input_dto import CreateUserInputDto
 from ..core.controller import Controller, Get, Post
 from ..decorators.validate_token import validate_token
 from ..deps.auth_service_stub import AuthServiceStubDepend
+from .dto.create_filter_dto import CreateFilterDto
 
 
-@Controller("user-input")
-class UserInputsController:
-    user_input_service: UserInputsService = Depends(UserInputsService)
+@Controller("filter")
+class FiltersController:
+    filters_service: FiltersService = Depends(FiltersService)
     story_block_service: StoryBlocksService = Depends(StoryBlocksService)
 
     @Get("/{story_block_id}/")
@@ -22,9 +22,9 @@ class UserInputsController:
         story_block_id: str,
     ):
         story_block = self.story_block_service.find_by_id(story_block_id)
-        user_inputs = self.user_input_service.find(story_block_id)
+        filter = self.filters_service.find(story_block_id)
 
-        return {"story_block": story_block, "user_inputs": user_inputs}
+        return {"story_block": story_block, "filter": filter}
 
     @Post("/")
     @validate_token
@@ -32,26 +32,19 @@ class UserInputsController:
         self,
         request: Request,
         auth_service_stub: AuthServiceStubDepend,
-        create_user_input_dto: CreateUserInputDto,
+        create_filter_dto: CreateFilterDto,
     ):
-        user_id = request.__dict__["user"].id
         story_block = None
-        user_inputs = False
 
-        if create_user_input_dto.story_block.id:
-            story_block = self.story_block_service.update(
-                create_user_input_dto.story_block
-            )
+        if create_filter_dto.story_block.id:
+            story_block = self.story_block_service.update(create_filter_dto.story_block)
 
-        if len(create_user_input_dto.user_inputs) > 0:
-            user_inputs = self.user_input_service.create(
-                create_user_input_dto.user_inputs, user_id
-            )
+        if create_filter_dto.filter:
+            self.filters_service.create(create_filter_dto.filter)
 
         return {
             "story_block": {
                 "id": story_block.id if story_block else "",
                 "name": story_block.name if story_block else "",
             },
-            "user_inputs": user_inputs,
         }

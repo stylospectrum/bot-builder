@@ -1,4 +1,3 @@
-
 import grpc
 
 from typing import Annotated
@@ -14,5 +13,4 @@ def get_stub():
         yield stub
 
 
-BotBuilderNlpServiceStubDepend = Annotated[BotBuilderNlpServiceStub, Depends(
-    get_stub)]
+BotBuilderNlpServiceStubDepend = Annotated[BotBuilderNlpServiceStub, Depends(get_stub)]

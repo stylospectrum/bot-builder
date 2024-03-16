@@ -7,32 +7,33 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nfile.proto\x12\x0c\x66ile.service\"?\n\x11\x43reateFileRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x10\n\x08owner_id\x18\x03 \x01(\t\"%\n\x12\x43reateFileResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\"\n\x0eGetFileRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\t\"\x1e\n\x0fGetFileResponse\x12\x0b\n\x03url\x18\x01 \x01(\t\"%\n\x11\x44\x65leteFileRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\t\"%\n\x12\x44\x65leteFileResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xfd\x01\n\x0b\x46ileService\x12Q\n\nCreateFile\x12\x1f.file.service.CreateFileRequest\x1a .file.service.CreateFileResponse\"\x00\x12H\n\x07GetFile\x12\x1c.file.service.GetFileRequest\x1a\x1d.file.service.GetFileResponse\"\x00\x12Q\n\nDeleteFile\x12\x1f.file.service.DeleteFileRequest\x1a .file.service.DeleteFileResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\nfile.proto\x12\x0c\x66ile.service"?\n\x11\x43reateFileRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x10\n\x08owner_id\x18\x03 \x01(\t"%\n\x12\x43reateFileResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08""\n\x0eGetFileRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\t"\x1e\n\x0fGetFileResponse\x12\x0b\n\x03url\x18\x01 \x01(\t"%\n\x11\x44\x65leteFileRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\t"%\n\x12\x44\x65leteFileResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xfd\x01\n\x0b\x46ileService\x12Q\n\nCreateFile\x12\x1f.file.service.CreateFileRequest\x1a .file.service.CreateFileResponse"\x00\x12H\n\x07GetFile\x12\x1c.file.service.GetFileRequest\x1a\x1d.file.service.GetFileResponse"\x00\x12Q\n\nDeleteFile\x12\x1f.file.service.DeleteFileRequest\x1a .file.service.DeleteFileResponse"\x00\x62\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'file_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "file_pb2", _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  _globals['_CREATEFILEREQUEST']._serialized_start=28
-  _globals['_CREATEFILEREQUEST']._serialized_end=91
-  _globals['_CREATEFILERESPONSE']._serialized_start=93
-  _globals['_CREATEFILERESPONSE']._serialized_end=130
-  _globals['_GETFILEREQUEST']._serialized_start=132
-  _globals['_GETFILEREQUEST']._serialized_end=166
-  _globals['_GETFILERESPONSE']._serialized_start=168
-  _globals['_GETFILERESPONSE']._serialized_end=198
-  _globals['_DELETEFILEREQUEST']._serialized_start=200
-  _globals['_DELETEFILEREQUEST']._serialized_end=237
-  _globals['_DELETEFILERESPONSE']._serialized_start=239
-  _globals['_DELETEFILERESPONSE']._serialized_end=276
-  _globals['_FILESERVICE']._serialized_start=279
-  _globals['_FILESERVICE']._serialized_end=532
+    DESCRIPTOR._options = None
+    _globals["_CREATEFILEREQUEST"]._serialized_start = 28
+    _globals["_CREATEFILEREQUEST"]._serialized_end = 91
+    _globals["_CREATEFILERESPONSE"]._serialized_start = 93
+    _globals["_CREATEFILERESPONSE"]._serialized_end = 130
+    _globals["_GETFILEREQUEST"]._serialized_start = 132
+    _globals["_GETFILEREQUEST"]._serialized_end = 166
+    _globals["_GETFILERESPONSE"]._serialized_start = 168
+    _globals["_GETFILERESPONSE"]._serialized_end = 198
+    _globals["_DELETEFILEREQUEST"]._serialized_start = 200
+    _globals["_DELETEFILEREQUEST"]._serialized_end = 237
+    _globals["_DELETEFILERESPONSE"]._serialized_start = 239
+    _globals["_DELETEFILERESPONSE"]._serialized_end = 276
+    _globals["_FILESERVICE"]._serialized_start = 279
+    _globals["_FILESERVICE"]._serialized_end = 532
 # @@protoc_insertion_point(module_scope)

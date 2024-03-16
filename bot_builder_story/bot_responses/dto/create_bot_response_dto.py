@@ -10,6 +10,7 @@ class CreateBotResponseBaseDto(BotResponseBaseDto):
     image_id: Optional[str] = None
     pass
 
+
 class CreateBotResponseDto(SQLModel):
     bot_responses: list[CreateBotResponseBaseDto]
     story_block: UpdateStoryBlockDto

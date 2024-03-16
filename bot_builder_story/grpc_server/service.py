@@ -16,69 +16,89 @@ from ..bot_responses.enum import BotResponseType
 from ..config.settings import settings
 
 
-class BotBuilderStoryServicer(bot_builder_story_pb2_grpc.BotBuilderStoryServiceServicer):
+class BotBuilderStoryServicer(
+    bot_builder_story_pb2_grpc.BotBuilderStoryServiceServicer
+):
     def __init__(self):
         channel = grpc.insecure_channel(settings.FILE_SERVICE_URL)
         self.file_service_stub = FileServiceStub(channel=channel)
 
     def GetStoryBlocks(self, request, context):
         with Session(engine) as session:
-            story_block = session.exec(select(StoryBlock).where(
-                and_(StoryBlock.type == StoryBlockType.StartPoint, StoryBlock.user_id == request.user_id))).first()
-            sb_json = json.loads(StoryBlockOutDto.model_validate(
-                story_block).model_dump_json())
+            story_block = session.exec(
+                select(StoryBlock).where(
+                    and_(
+                        StoryBlock.type == StoryBlockType.StartPoint,
+                        StoryBlock.user_id == request.user_id,
+                    )
+                )
+            ).first()
+            sb_json = json.loads(
+                StoryBlockOutDto.model_validate(story_block).model_dump_json()
+            )
             return bot_builder_story_pb2.StoryBlock(**sb_json)
 
     def GetBotResponses(self, request, context):
         with Session(engine) as session:
-            bot_responses = session.exec(select(BotResponse).where(
-                BotResponse.story_block_id == request.story_block_id)).all()
+            bot_responses = session.exec(
+                select(BotResponse).where(
+                    BotResponse.story_block_id == request.story_block_id
+                )
+            ).all()
             result = []
 
             for bot_response in bot_responses:
-                bot_response_out = BotResponseOutDto.model_validate(
-                    bot_response)
+                bot_response_out = BotResponseOutDto.model_validate(bot_response)
 
                 if bot_response_out.type == BotResponseType.Image:
                     file_response: GetFileResponse = self.file_service_stub.GetFile(
-                        GetFileRequest(owner_id=str(bot_response.id)))
+                        GetFileRequest(owner_id=str(bot_response.id))
+                    )
 
                     bot_response_out.image_url = file_response.url
 
                 if bot_response_out.type == BotResponseType.Gallery:
                     bot_response_out.gallery = [
-                        item.model_dump() for item in bot_response_out.gallery]
+                        item.model_dump() for item in bot_response_out.gallery
+                    ]
 
                     for gallery_item in bot_response_out.gallery:
                         file_response: GetFileResponse = self.file_service_stub.GetFile(
-                            GetFileRequest(owner_id=str(gallery_item['id'])))
+                            GetFileRequest(owner_id=str(gallery_item["id"]))
+                        )
 
-                        gallery_item['image_url'] = file_response.url
+                        gallery_item["image_url"] = file_response.url
 
                 gallery = []
 
                 for gallery_item in bot_response_out.gallery:
                     buttons = []
 
-                    for button in gallery_item['buttons']:
-                        buttons.append({
-                            'content': button['content'],
-                            'go_to': button['go_to']
-                        })
-                    
-                    gallery.append({
-                        'title': gallery_item['title'],
-                        'description': gallery_item['description'],
-                        'img_url': gallery_item['image_url'],
-                        'buttons': buttons
-                    })
+                    for button in gallery_item["buttons"]:
+                        buttons.append(
+                            {"content": button["content"], "go_to": button["go_to"]}
+                        )
 
-                result.append({
-                    'type': bot_response_out.type,
-                    'variants': [v.content for v in bot_response_out.variants],
-                    'img_url': bot_response_out.image_url,
-                    'gallery': gallery,
-                    'buttons': [{'content': button.content, 'go_to': button.go_to} for button in bot_response_out.buttons],
-                })
+                    gallery.append(
+                        {
+                            "title": gallery_item["title"],
+                            "description": gallery_item["description"],
+                            "img_url": gallery_item["image_url"],
+                            "buttons": buttons,
+                        }
+                    )
+
+                result.append(
+                    {
+                        "type": bot_response_out.type,
+                        "variants": [v.content for v in bot_response_out.variants],
+                        "img_url": bot_response_out.image_url,
+                        "gallery": gallery,
+                        "buttons": [
+                            {"content": button.content, "go_to": button.go_to}
+                            for button in bot_response_out.buttons
+                        ],
+                    }
+                )
 
             return bot_builder_story_pb2.GetBotResponsesResponse(responses=result)

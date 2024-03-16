@@ -12,10 +12,12 @@ class BotResponseButtonDto(SQLModel):
     go_to: Optional[str] = None
     deleted: Optional[bool] = False
 
+
 class BotResponseTextDto(SQLModel):
     id: Optional[uuid.UUID] = None
     content: Optional[str] = None
     deleted: Optional[bool] = False
+
 
 class BotResponseGalleryItemDto(SQLModel):
     id: Optional[uuid.UUID] = None
@@ -25,6 +27,7 @@ class BotResponseGalleryItemDto(SQLModel):
     description: Optional[str] = None
     buttons: Optional[list[BotResponseButtonDto]] = None
     deleted: Optional[bool] = False
+
 
 class BotResponseBaseDto(SQLModel):
     id: Optional[uuid.UUID] = None

@@ -1,7 +1,13 @@
 from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from typing import (
+    ClassVar as _ClassVar,
+    Iterable as _Iterable,
+    Mapping as _Mapping,
+    Optional as _Optional,
+    Union as _Union,
+)
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -25,7 +31,15 @@ class StoryBlock(_message.Message):
     user_id: str
     parent_id: str
     children: _containers.RepeatedCompositeFieldContainer[StoryBlock]
-    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., type: _Optional[str] = ..., user_id: _Optional[str] = ..., parent_id: _Optional[str] = ..., children: _Optional[_Iterable[_Union[StoryBlock, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        id: _Optional[str] = ...,
+        name: _Optional[str] = ...,
+        type: _Optional[str] = ...,
+        user_id: _Optional[str] = ...,
+        parent_id: _Optional[str] = ...,
+        children: _Optional[_Iterable[_Union[StoryBlock, _Mapping]]] = ...,
+    ) -> None: ...
 
 class GetBotResponsesRequest(_message.Message):
     __slots__ = ("story_block_id",)
@@ -37,7 +51,9 @@ class GetBotResponsesResponse(_message.Message):
     __slots__ = ("responses",)
     RESPONSES_FIELD_NUMBER: _ClassVar[int]
     responses: _containers.RepeatedCompositeFieldContainer[BotResponse]
-    def __init__(self, responses: _Optional[_Iterable[_Union[BotResponse, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self, responses: _Optional[_Iterable[_Union[BotResponse, _Mapping]]] = ...
+    ) -> None: ...
 
 class BotResponseButton(_message.Message):
     __slots__ = ("content", "go_to")
@@ -45,7 +61,9 @@ class BotResponseButton(_message.Message):
     GO_TO_FIELD_NUMBER: _ClassVar[int]
     content: str
     go_to: str
-    def __init__(self, content: _Optional[str] = ..., go_to: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, content: _Optional[str] = ..., go_to: _Optional[str] = ...
+    ) -> None: ...
 
 class BotResponseGalleryItem(_message.Message):
     __slots__ = ("img_url", "title", "description", "buttons")
@@ -57,7 +75,13 @@ class BotResponseGalleryItem(_message.Message):
     title: str
     description: str
     buttons: _containers.RepeatedCompositeFieldContainer[BotResponseButton]
-    def __init__(self, img_url: _Optional[str] = ..., title: _Optional[str] = ..., description: _Optional[str] = ..., buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        img_url: _Optional[str] = ...,
+        title: _Optional[str] = ...,
+        description: _Optional[str] = ...,
+        buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ...,
+    ) -> None: ...
 
 class BotResponse(_message.Message):
     __slots__ = ("type", "variants", "img_url", "buttons", "gallery")
@@ -71,4 +95,11 @@ class BotResponse(_message.Message):
     img_url: str
     buttons: _containers.RepeatedCompositeFieldContainer[BotResponseButton]
     gallery: _containers.RepeatedCompositeFieldContainer[BotResponseGalleryItem]
-    def __init__(self, type: _Optional[str] = ..., variants: _Optional[_Iterable[str]] = ..., img_url: _Optional[str] = ..., buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ..., gallery: _Optional[_Iterable[_Union[BotResponseGalleryItem, _Mapping]]] = ...) -> None: ...
+    def __init__(
+        self,
+        type: _Optional[str] = ...,
+        variants: _Optional[_Iterable[str]] = ...,
+        img_url: _Optional[str] = ...,
+        buttons: _Optional[_Iterable[_Union[BotResponseButton, _Mapping]]] = ...,
+        gallery: _Optional[_Iterable[_Union[BotResponseGalleryItem, _Mapping]]] = ...,
+    ) -> None: ...

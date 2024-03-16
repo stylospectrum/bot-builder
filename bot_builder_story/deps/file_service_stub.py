@@ -1,4 +1,3 @@
-
 import grpc
 
 from typing import Annotated

@@ -14,119 +14,201 @@ class BotBuilderNlpServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.LoadBotStory = channel.unary_unary(
+            "/bot_builder_nlp.service.BotBuilderNlpService/LoadBotStory",
+            request_serializer=bot__builder__nlp__pb2.LoadBotStoryRequest.SerializeToString,
+            response_deserializer=bot__builder__nlp__pb2.LoadBotStoryResponse.FromString,
+        )
+        self.GetBotResponses = channel.unary_unary(
+            "/bot_builder_nlp.service.BotBuilderNlpService/GetBotResponses",
+            request_serializer=bot__builder__nlp__pb2.GetBotResponsesRequest.SerializeToString,
+            response_deserializer=bot__builder__nlp__pb2.GetBotResponsesResponse.FromString,
+        )
         self.UpsertEmbedding = channel.unary_unary(
-                '/bot_builder_nlp.service.BotBuilderNlpService/UpsertEmbedding',
-                request_serializer=bot__builder__nlp__pb2.UpsertEmbeddingRequest.SerializeToString,
-                response_deserializer=bot__builder__nlp__pb2.UpsertEmbeddingResponse.FromString,
-                )
+            "/bot_builder_nlp.service.BotBuilderNlpService/UpsertEmbedding",
+            request_serializer=bot__builder__nlp__pb2.UpsertEmbeddingRequest.SerializeToString,
+            response_deserializer=bot__builder__nlp__pb2.UpsertEmbeddingResponse.FromString,
+        )
         self.DeleteEmbedding = channel.unary_unary(
-                '/bot_builder_nlp.service.BotBuilderNlpService/DeleteEmbedding',
-                request_serializer=bot__builder__nlp__pb2.DeleteEmbeddingRequest.SerializeToString,
-                response_deserializer=bot__builder__nlp__pb2.DeleteEmbeddingResponse.FromString,
-                )
-        self.GetStoryBlockId = channel.unary_unary(
-                '/bot_builder_nlp.service.BotBuilderNlpService/GetStoryBlockId',
-                request_serializer=bot__builder__nlp__pb2.GetStoryBlockIdRequest.SerializeToString,
-                response_deserializer=bot__builder__nlp__pb2.GetStoryBlockIdResponse.FromString,
-                )
+            "/bot_builder_nlp.service.BotBuilderNlpService/DeleteEmbedding",
+            request_serializer=bot__builder__nlp__pb2.DeleteEmbeddingRequest.SerializeToString,
+            response_deserializer=bot__builder__nlp__pb2.DeleteEmbeddingResponse.FromString,
+        )
 
 
 class BotBuilderNlpServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
+    def LoadBotStory(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def GetBotResponses(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
     def UpsertEmbedding(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def DeleteEmbedding(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetStoryBlockId(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_BotBuilderNlpServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'UpsertEmbedding': grpc.unary_unary_rpc_method_handler(
-                    servicer.UpsertEmbedding,
-                    request_deserializer=bot__builder__nlp__pb2.UpsertEmbeddingRequest.FromString,
-                    response_serializer=bot__builder__nlp__pb2.UpsertEmbeddingResponse.SerializeToString,
-            ),
-            'DeleteEmbedding': grpc.unary_unary_rpc_method_handler(
-                    servicer.DeleteEmbedding,
-                    request_deserializer=bot__builder__nlp__pb2.DeleteEmbeddingRequest.FromString,
-                    response_serializer=bot__builder__nlp__pb2.DeleteEmbeddingResponse.SerializeToString,
-            ),
-            'GetStoryBlockId': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetStoryBlockId,
-                    request_deserializer=bot__builder__nlp__pb2.GetStoryBlockIdRequest.FromString,
-                    response_serializer=bot__builder__nlp__pb2.GetStoryBlockIdResponse.SerializeToString,
-            ),
+        "LoadBotStory": grpc.unary_unary_rpc_method_handler(
+            servicer.LoadBotStory,
+            request_deserializer=bot__builder__nlp__pb2.LoadBotStoryRequest.FromString,
+            response_serializer=bot__builder__nlp__pb2.LoadBotStoryResponse.SerializeToString,
+        ),
+        "GetBotResponses": grpc.unary_unary_rpc_method_handler(
+            servicer.GetBotResponses,
+            request_deserializer=bot__builder__nlp__pb2.GetBotResponsesRequest.FromString,
+            response_serializer=bot__builder__nlp__pb2.GetBotResponsesResponse.SerializeToString,
+        ),
+        "UpsertEmbedding": grpc.unary_unary_rpc_method_handler(
+            servicer.UpsertEmbedding,
+            request_deserializer=bot__builder__nlp__pb2.UpsertEmbeddingRequest.FromString,
+            response_serializer=bot__builder__nlp__pb2.UpsertEmbeddingResponse.SerializeToString,
+        ),
+        "DeleteEmbedding": grpc.unary_unary_rpc_method_handler(
+            servicer.DeleteEmbedding,
+            request_deserializer=bot__builder__nlp__pb2.DeleteEmbeddingRequest.FromString,
+            response_serializer=bot__builder__nlp__pb2.DeleteEmbeddingResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'bot_builder_nlp.service.BotBuilderNlpService', rpc_method_handlers)
+        "bot_builder_nlp.service.BotBuilderNlpService", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class BotBuilderNlpService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def UpsertEmbedding(request,
+    def LoadBotStory(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bot_builder_nlp.service.BotBuilderNlpService/UpsertEmbedding',
+            "/bot_builder_nlp.service.BotBuilderNlpService/LoadBotStory",
+            bot__builder__nlp__pb2.LoadBotStoryRequest.SerializeToString,
+            bot__builder__nlp__pb2.LoadBotStoryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def GetBotResponses(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/bot_builder_nlp.service.BotBuilderNlpService/GetBotResponses",
+            bot__builder__nlp__pb2.GetBotResponsesRequest.SerializeToString,
+            bot__builder__nlp__pb2.GetBotResponsesResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def UpsertEmbedding(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/bot_builder_nlp.service.BotBuilderNlpService/UpsertEmbedding",
             bot__builder__nlp__pb2.UpsertEmbeddingRequest.SerializeToString,
             bot__builder__nlp__pb2.UpsertEmbeddingResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def DeleteEmbedding(request,
+    def DeleteEmbedding(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bot_builder_nlp.service.BotBuilderNlpService/DeleteEmbedding',
+            "/bot_builder_nlp.service.BotBuilderNlpService/DeleteEmbedding",
             bot__builder__nlp__pb2.DeleteEmbeddingRequest.SerializeToString,
             bot__builder__nlp__pb2.DeleteEmbeddingResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetStoryBlockId(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bot_builder_nlp.service.BotBuilderNlpService/GetStoryBlockId',
-            bot__builder__nlp__pb2.GetStoryBlockIdRequest.SerializeToString,
-            bot__builder__nlp__pb2.GetStoryBlockIdResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )

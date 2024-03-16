@@ -3,7 +3,6 @@ Credit: FastAPI-Utils
 Source: https://github.com/dmontagu/fastapi-utils/blob/master/fastapi_utils/cbv.py
 """
 
-
 import inspect
 from typing import Any, Callable, List, Type, TypeVar, Union, get_type_hints
 
@@ -39,9 +38,7 @@ def _init_cbv(cls: Type[Any]) -> None:
         return
     old_init: Callable[..., Any] = cls.__init__
     old_signature = inspect.signature(old_init)
-    old_parameters = list(old_signature.parameters.values())[
-        1:
-    ]
+    old_parameters = list(old_signature.parameters.values())[1:]
     new_parameters = [
         x
         for x in old_parameters
@@ -78,8 +75,7 @@ def _update_cbv_route_endpoint_signature(
 ) -> None:
     old_endpoint = route.endpoint
     old_signature = inspect.signature(old_endpoint)
-    old_parameters: List[inspect.Parameter] = list(
-        old_signature.parameters.values())
+    old_parameters: List[inspect.Parameter] = list(old_signature.parameters.values())
     old_first_parameter = old_parameters[0]
     new_first_parameter = old_first_parameter.replace(default=Depends(cls))
     new_parameters = [new_first_parameter] + [

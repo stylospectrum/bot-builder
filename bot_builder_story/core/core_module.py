@@ -2,11 +2,7 @@ from fastapi import FastAPI, APIRouter
 
 
 class CoreModule(FastAPI):
-    def __init__(
-            self,
-            modules: list,
-            **kwargs
-    ):
+    def __init__(self, modules: list, **kwargs):
         super().__init__(**kwargs)
         self.modules = modules
         self._register_controllers()

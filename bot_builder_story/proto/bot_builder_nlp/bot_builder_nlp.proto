@@ -3,9 +3,47 @@ syntax = "proto3";
 package bot_builder_nlp.service;
 
 service BotBuilderNlpService {
+  rpc LoadBotStory(LoadBotStoryRequest) returns (LoadBotStoryResponse);
+  rpc GetBotResponses(GetBotResponsesRequest) returns (GetBotResponsesResponse);
   rpc UpsertEmbedding(UpsertEmbeddingRequest) returns (UpsertEmbeddingResponse);
   rpc DeleteEmbedding(DeleteEmbeddingRequest) returns (DeleteEmbeddingResponse);
-  rpc GetStoryBlockId(GetStoryBlockIdRequest) returns (GetStoryBlockIdResponse);
+}
+
+message LoadBotStoryRequest {
+  string user_id = 1;
+}
+
+message LoadBotStoryResponse {
+  repeated BotResponse responses = 1;
+}
+
+message GetBotResponsesRequest {
+  string user_id = 1;
+  string user_input = 2;
+}
+
+message GetBotResponsesResponse {
+  repeated BotResponse responses = 1;
+}
+
+message BotResponseButton {
+  string content = 1;
+  string go_to = 2;
+}
+
+message BotResponseGalleryItem {
+  string img_url = 1;
+  string title = 2;
+  string description = 3;
+  repeated BotResponseButton buttons = 4;
+}
+
+message BotResponse {
+  string type = 1;
+  repeated string variants = 2;
+  string img_url = 3;
+  repeated BotResponseButton buttons = 4;
+  repeated BotResponseGalleryItem gallery = 5;
 }
 
 message UserInput {
@@ -29,13 +67,4 @@ message DeleteEmbeddingRequest {
 
 message DeleteEmbeddingResponse {
   bool success = 1;
-}
-
-message GetStoryBlockIdRequest {
-  string user_id = 1;
-  string user_input = 2;
-}
-
-message GetStoryBlockIdResponse {
-  string story_block_id = 1;
 }
