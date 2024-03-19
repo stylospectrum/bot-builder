@@ -5,6 +5,25 @@ package bot_builder_story.service;
 service BotBuilderStoryService {
   rpc GetStoryBlocks(GetStoryBlocksRequest) returns (StoryBlock);
   rpc GetBotResponses(GetBotResponsesRequest) returns (GetBotResponsesResponse);
+  rpc GetFilters(GetFiltersRequest) returns (GetFiltersResponse);
+}
+
+message GetFiltersRequest {
+  repeated string story_block_ids = 1;
+}
+
+message GetFiltersResponse {
+  repeated Filter filters = 1;
+}
+
+message Filter {
+  string id = 1;
+  string attribute = 2;
+  string operator = 3;
+  string value = 4;
+  string parent_id = 5;
+  string story_block_id = 6;
+  repeated Filter sub_exprs = 7;
 }
 
 message GetStoryBlocksRequest {
@@ -21,7 +40,7 @@ message StoryBlock {
 }
 
 message GetBotResponsesRequest {
-  string story_block_id = 2;
+  string story_block_id = 1;
 }
 
 message GetBotResponsesResponse {

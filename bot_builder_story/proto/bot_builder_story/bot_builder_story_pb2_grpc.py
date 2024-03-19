@@ -24,6 +24,11 @@ class BotBuilderStoryServiceStub(object):
             request_serializer=bot__builder__story__pb2.GetBotResponsesRequest.SerializeToString,
             response_deserializer=bot__builder__story__pb2.GetBotResponsesResponse.FromString,
         )
+        self.GetFilters = channel.unary_unary(
+            "/bot_builder_story.service.BotBuilderStoryService/GetFilters",
+            request_serializer=bot__builder__story__pb2.GetFiltersRequest.SerializeToString,
+            response_deserializer=bot__builder__story__pb2.GetFiltersResponse.FromString,
+        )
 
 
 class BotBuilderStoryServiceServicer(object):
@@ -41,6 +46,12 @@ class BotBuilderStoryServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def GetFilters(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
 
 def add_BotBuilderStoryServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_BotBuilderStoryServiceServicer_to_server(servicer, server):
             servicer.GetBotResponses,
             request_deserializer=bot__builder__story__pb2.GetBotResponsesRequest.FromString,
             response_serializer=bot__builder__story__pb2.GetBotResponsesResponse.SerializeToString,
+        ),
+        "GetFilters": grpc.unary_unary_rpc_method_handler(
+            servicer.GetFilters,
+            request_deserializer=bot__builder__story__pb2.GetFiltersRequest.FromString,
+            response_serializer=bot__builder__story__pb2.GetFiltersResponse.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -113,6 +129,35 @@ class BotBuilderStoryService(object):
             "/bot_builder_story.service.BotBuilderStoryService/GetBotResponses",
             bot__builder__story__pb2.GetBotResponsesRequest.SerializeToString,
             bot__builder__story__pb2.GetBotResponsesResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def GetFilters(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/bot_builder_story.service.BotBuilderStoryService/GetFilters",
+            bot__builder__story__pb2.GetFiltersRequest.SerializeToString,
+            bot__builder__story__pb2.GetFiltersResponse.FromString,
             options,
             channel_credentials,
             insecure,

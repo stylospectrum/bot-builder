@@ -7,3 +7,4 @@ class StoryBlockType(str, enum.Enum):
     StartPoint = "StartPoint"
     DefaultFallback = "DefaultFallback"
     Filter = "Filter"
+    Fallback = "Fallback"

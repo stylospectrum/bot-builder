@@ -13,6 +13,8 @@ from ..story_blocks.dto.story_block_out_dto import StoryBlockOutDto
 from ..bot_responses.schemas.bot_response_schema import BotResponse
 from ..bot_responses.dto.bot_response_out_dto import BotResponseOutDto
 from ..bot_responses.enum import BotResponseType
+from ..filters.schemas.filter_schema import Filter
+from ..filters.dto.filter_out_dto import FilterOutDto
 from ..config.settings import settings
 
 
@@ -102,3 +104,23 @@ class BotBuilderStoryServicer(
                 )
 
             return bot_builder_story_pb2.GetBotResponsesResponse(responses=result)
+
+    def GetFilters(self, request, context):
+        with Session(engine) as session:
+            filters = session.exec(
+                select(Filter).where(
+                    and_(
+                        Filter.story_block_id.in_(request.story_block_ids),
+                        Filter.parent_id == None,
+                    )
+                )
+            ).all()
+
+            result = []
+
+            for filter in filters:
+                result.append(
+                    json.loads(FilterOutDto.model_validate(filter).model_dump_json())
+                )
+
+            return bot_builder_story_pb2.GetFiltersResponse(filters=result)

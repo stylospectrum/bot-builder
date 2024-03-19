@@ -12,7 +12,9 @@ class FiltersService:
 
     def find(self, story_block_id: str):
         filter = self.session.exec(
-            select(Filter).where(and_(Filter.story_block_id == story_block_id, Filter.parent_id == None))
+            select(Filter).where(
+                and_(Filter.story_block_id == story_block_id, Filter.parent_id == None)
+            )
         ).first()
 
         if not filter:
@@ -45,7 +47,9 @@ class FiltersService:
 
     def create(self, create_filter_dto: CreateBaseFilterDto):
         self.session.exec(
-            delete(Filter).where(Filter.story_block_id == create_filter_dto.story_block_id)
+            delete(Filter).where(
+                Filter.story_block_id == create_filter_dto.story_block_id
+            )
         )
         self.session.commit()
         self.create_base(create_filter_dto)

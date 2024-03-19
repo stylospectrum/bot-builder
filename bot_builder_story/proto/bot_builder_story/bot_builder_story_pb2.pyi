@@ -11,6 +11,55 @@ from typing import (
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class GetFiltersRequest(_message.Message):
+    __slots__ = ("story_block_ids",)
+    STORY_BLOCK_IDS_FIELD_NUMBER: _ClassVar[int]
+    story_block_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, story_block_ids: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class GetFiltersResponse(_message.Message):
+    __slots__ = ("filters",)
+    FILTERS_FIELD_NUMBER: _ClassVar[int]
+    filters: _containers.RepeatedCompositeFieldContainer[Filter]
+    def __init__(
+        self, filters: _Optional[_Iterable[_Union[Filter, _Mapping]]] = ...
+    ) -> None: ...
+
+class Filter(_message.Message):
+    __slots__ = (
+        "id",
+        "attribute",
+        "operator",
+        "value",
+        "parent_id",
+        "story_block_id",
+        "sub_exprs",
+    )
+    ID_FIELD_NUMBER: _ClassVar[int]
+    ATTRIBUTE_FIELD_NUMBER: _ClassVar[int]
+    OPERATOR_FIELD_NUMBER: _ClassVar[int]
+    VALUE_FIELD_NUMBER: _ClassVar[int]
+    PARENT_ID_FIELD_NUMBER: _ClassVar[int]
+    STORY_BLOCK_ID_FIELD_NUMBER: _ClassVar[int]
+    SUB_EXPRS_FIELD_NUMBER: _ClassVar[int]
+    id: str
+    attribute: str
+    operator: str
+    value: str
+    parent_id: str
+    story_block_id: str
+    sub_exprs: _containers.RepeatedCompositeFieldContainer[Filter]
+    def __init__(
+        self,
+        id: _Optional[str] = ...,
+        attribute: _Optional[str] = ...,
+        operator: _Optional[str] = ...,
+        value: _Optional[str] = ...,
+        parent_id: _Optional[str] = ...,
+        story_block_id: _Optional[str] = ...,
+        sub_exprs: _Optional[_Iterable[_Union[Filter, _Mapping]]] = ...,
+    ) -> None: ...
+
 class GetStoryBlocksRequest(_message.Message):
     __slots__ = ("user_id",)
     USER_ID_FIELD_NUMBER: _ClassVar[int]
