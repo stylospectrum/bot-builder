@@ -7,41 +7,48 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x17\x62ot_builder_story.proto\x12\x19\x62ot_builder_story.service",\n\x11GetFiltersRequest\x12\x17\n\x0fstory_block_ids\x18\x01 \x03(\t"H\n\x12GetFiltersResponse\x12\x32\n\x07\x66ilters\x18\x01 \x03(\x0b\x32!.bot_builder_story.service.Filter"\xa9\x01\n\x06\x46ilter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tattribute\x18\x02 \x01(\t\x12\x10\n\x08operator\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x16\n\x0estory_block_id\x18\x06 \x01(\t\x12\x34\n\tsub_exprs\x18\x07 \x03(\x0b\x32!.bot_builder_story.service.Filter"(\n\x15GetStoryBlocksRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t"\x91\x01\n\nStoryBlock\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0f\n\x07user_id\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x37\n\x08\x63hildren\x18\x06 \x03(\x0b\x32%.bot_builder_story.service.StoryBlock"0\n\x16GetBotResponsesRequest\x12\x16\n\x0estory_block_id\x18\x01 \x01(\t"T\n\x17GetBotResponsesResponse\x12\x39\n\tresponses\x18\x01 \x03(\x0b\x32&.bot_builder_story.service.BotResponse"3\n\x11\x42otResponseButton\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\r\n\x05go_to\x18\x02 \x01(\t"\x8c\x01\n\x16\x42otResponseGalleryItem\x12\x0f\n\x07img_url\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12=\n\x07\x62uttons\x18\x04 \x03(\x0b\x32,.bot_builder_story.service.BotResponseButton"\xc1\x01\n\x0b\x42otResponse\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x10\n\x08variants\x18\x02 \x03(\t\x12\x0f\n\x07img_url\x18\x03 \x01(\t\x12=\n\x07\x62uttons\x18\x04 \x03(\x0b\x32,.bot_builder_story.service.BotResponseButton\x12\x42\n\x07gallery\x18\x05 \x03(\x0b\x32\x31.bot_builder_story.service.BotResponseGalleryItem2\xe8\x02\n\x16\x42otBuilderStoryService\x12i\n\x0eGetStoryBlocks\x12\x30.bot_builder_story.service.GetStoryBlocksRequest\x1a%.bot_builder_story.service.StoryBlock\x12x\n\x0fGetBotResponses\x12\x31.bot_builder_story.service.GetBotResponsesRequest\x1a\x32.bot_builder_story.service.GetBotResponsesResponse\x12i\n\nGetFilters\x12,.bot_builder_story.service.GetFiltersRequest\x1a-.bot_builder_story.service.GetFiltersResponseb\x06proto3'
-)
+
+
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17\x62ot_builder_story.proto\x12\x19\x62ot_builder_story.service\".\n\x14GetUserInputsRequest\x12\x16\n\x0estory_block_id\x18\x01 \x01(\t\"M\n\x15GetUserInputsResponse\x12\x34\n\x06inputs\x18\x01 \x03(\x0b\x32$.bot_builder_story.service.UserInput\"\x1c\n\tUserInput\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\",\n\x11GetFiltersRequest\x12\x17\n\x0fstory_block_ids\x18\x01 \x03(\t\"H\n\x12GetFiltersResponse\x12\x32\n\x07\x66ilters\x18\x01 \x03(\x0b\x32!.bot_builder_story.service.Filter\"\xab\x01\n\x06\x46ilter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0bvariable_id\x18\x02 \x01(\t\x12\x10\n\x08operator\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x16\n\x0estory_block_id\x18\x06 \x01(\t\x12\x34\n\tsub_exprs\x18\x07 \x03(\x0b\x32!.bot_builder_story.service.Filter\"(\n\x15GetStoryBlocksRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\"\x91\x01\n\nStoryBlock\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x0f\n\x07user_id\x18\x04 \x01(\t\x12\x11\n\tparent_id\x18\x05 \x01(\t\x12\x37\n\x08\x63hildren\x18\x06 \x03(\x0b\x32%.bot_builder_story.service.StoryBlock\"0\n\x16GetBotResponsesRequest\x12\x16\n\x0estory_block_id\x18\x01 \x01(\t\"T\n\x17GetBotResponsesResponse\x12\x39\n\tresponses\x18\x01 \x03(\x0b\x32&.bot_builder_story.service.BotResponse\";\n\x15\x42otResponseButtonExpr\x12\x13\n\x0bvariable_id\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"t\n\x11\x42otResponseButton\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\r\n\x05go_to\x18\x02 \x01(\t\x12?\n\x05\x65xprs\x18\x03 \x03(\x0b\x32\x30.bot_builder_story.service.BotResponseButtonExpr\"\x8c\x01\n\x16\x42otResponseGalleryItem\x12\x0f\n\x07img_url\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12=\n\x07\x62uttons\x18\x04 \x03(\x0b\x32,.bot_builder_story.service.BotResponseButton\"\xc1\x01\n\x0b\x42otResponse\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x10\n\x08variants\x18\x02 \x03(\t\x12\x0f\n\x07img_url\x18\x03 \x01(\t\x12=\n\x07\x62uttons\x18\x04 \x03(\x0b\x32,.bot_builder_story.service.BotResponseButton\x12\x42\n\x07gallery\x18\x05 \x03(\x0b\x32\x31.bot_builder_story.service.BotResponseGalleryItem2\xdc\x03\n\x16\x42otBuilderStoryService\x12i\n\x0eGetStoryBlocks\x12\x30.bot_builder_story.service.GetStoryBlocksRequest\x1a%.bot_builder_story.service.StoryBlock\x12x\n\x0fGetBotResponses\x12\x31.bot_builder_story.service.GetBotResponsesRequest\x1a\x32.bot_builder_story.service.GetBotResponsesResponse\x12i\n\nGetFilters\x12,.bot_builder_story.service.GetFiltersRequest\x1a-.bot_builder_story.service.GetFiltersResponse\x12r\n\rGetUserInputs\x12/.bot_builder_story.service.GetUserInputsRequest\x1a\x30.bot_builder_story.service.GetUserInputsResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "bot_builder_story_pb2", _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'bot_builder_story_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-    DESCRIPTOR._options = None
-    _globals["_GETFILTERSREQUEST"]._serialized_start = 54
-    _globals["_GETFILTERSREQUEST"]._serialized_end = 98
-    _globals["_GETFILTERSRESPONSE"]._serialized_start = 100
-    _globals["_GETFILTERSRESPONSE"]._serialized_end = 172
-    _globals["_FILTER"]._serialized_start = 175
-    _globals["_FILTER"]._serialized_end = 344
-    _globals["_GETSTORYBLOCKSREQUEST"]._serialized_start = 346
-    _globals["_GETSTORYBLOCKSREQUEST"]._serialized_end = 386
-    _globals["_STORYBLOCK"]._serialized_start = 389
-    _globals["_STORYBLOCK"]._serialized_end = 534
-    _globals["_GETBOTRESPONSESREQUEST"]._serialized_start = 536
-    _globals["_GETBOTRESPONSESREQUEST"]._serialized_end = 584
-    _globals["_GETBOTRESPONSESRESPONSE"]._serialized_start = 586
-    _globals["_GETBOTRESPONSESRESPONSE"]._serialized_end = 670
-    _globals["_BOTRESPONSEBUTTON"]._serialized_start = 672
-    _globals["_BOTRESPONSEBUTTON"]._serialized_end = 723
-    _globals["_BOTRESPONSEGALLERYITEM"]._serialized_start = 726
-    _globals["_BOTRESPONSEGALLERYITEM"]._serialized_end = 866
-    _globals["_BOTRESPONSE"]._serialized_start = 869
-    _globals["_BOTRESPONSE"]._serialized_end = 1062
-    _globals["_BOTBUILDERSTORYSERVICE"]._serialized_start = 1065
-    _globals["_BOTBUILDERSTORYSERVICE"]._serialized_end = 1425
+  DESCRIPTOR._options = None
+  _globals['_GETUSERINPUTSREQUEST']._serialized_start=54
+  _globals['_GETUSERINPUTSREQUEST']._serialized_end=100
+  _globals['_GETUSERINPUTSRESPONSE']._serialized_start=102
+  _globals['_GETUSERINPUTSRESPONSE']._serialized_end=179
+  _globals['_USERINPUT']._serialized_start=181
+  _globals['_USERINPUT']._serialized_end=209
+  _globals['_GETFILTERSREQUEST']._serialized_start=211
+  _globals['_GETFILTERSREQUEST']._serialized_end=255
+  _globals['_GETFILTERSRESPONSE']._serialized_start=257
+  _globals['_GETFILTERSRESPONSE']._serialized_end=329
+  _globals['_FILTER']._serialized_start=332
+  _globals['_FILTER']._serialized_end=503
+  _globals['_GETSTORYBLOCKSREQUEST']._serialized_start=505
+  _globals['_GETSTORYBLOCKSREQUEST']._serialized_end=545
+  _globals['_STORYBLOCK']._serialized_start=548
+  _globals['_STORYBLOCK']._serialized_end=693
+  _globals['_GETBOTRESPONSESREQUEST']._serialized_start=695
+  _globals['_GETBOTRESPONSESREQUEST']._serialized_end=743
+  _globals['_GETBOTRESPONSESRESPONSE']._serialized_start=745
+  _globals['_GETBOTRESPONSESRESPONSE']._serialized_end=829
+  _globals['_BOTRESPONSEBUTTONEXPR']._serialized_start=831
+  _globals['_BOTRESPONSEBUTTONEXPR']._serialized_end=890
+  _globals['_BOTRESPONSEBUTTON']._serialized_start=892
+  _globals['_BOTRESPONSEBUTTON']._serialized_end=1008
+  _globals['_BOTRESPONSEGALLERYITEM']._serialized_start=1011
+  _globals['_BOTRESPONSEGALLERYITEM']._serialized_end=1151
+  _globals['_BOTRESPONSE']._serialized_start=1154
+  _globals['_BOTRESPONSE']._serialized_end=1347
+  _globals['_BOTBUILDERSTORYSERVICE']._serialized_start=1350
+  _globals['_BOTBUILDERSTORYSERVICE']._serialized_end=1826
 # @@protoc_insertion_point(module_scope)

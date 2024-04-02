@@ -39,6 +39,16 @@ class StoryBlocksService:
         for child in parent.children:
             r.extend(self.nodes_from_tree(child))
         return r
+    
+    def find_user_input_blocks(self, user_id: str):
+        return self.session.exec(
+            select(StoryBlock).where(
+                and_(
+                    StoryBlock.user_id == user_id,
+                    StoryBlock.type == StoryBlockType.UserInput,
+                )
+            )
+        ).all()
 
     def find_by_id(self, id: str):
         return self.session.exec(select(StoryBlock).where(StoryBlock.id == id)).first()

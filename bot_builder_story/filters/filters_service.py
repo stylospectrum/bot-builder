@@ -25,7 +25,7 @@ class FiltersService:
     def create_base(self, create_filter_dto: CreateBaseFilterDto):
         create_filter_dto = create_filter_dto.model_dump()
         filter = Filter(
-            attribute=create_filter_dto["attribute"],
+            variable_id=create_filter_dto["variable_id"],
             operator=create_filter_dto["operator"],
             value=create_filter_dto["value"],
             story_block_id=create_filter_dto["story_block_id"],

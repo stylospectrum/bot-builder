@@ -21,6 +21,12 @@ class StoryBlocksController:
     def find(self, request: Request, auth_service_stub: AuthServiceStubDepend):
         user_id = request.__dict__["user"].id
         return self.story_block_service.find(user_id)
+    
+    @Get("/user-input-block/")
+    @validate_token
+    def find_user_input_blocks(self, request: Request, auth_service_stub: AuthServiceStubDepend):
+        user_id = request.__dict__["user"].id
+        return self.story_block_service.find_user_input_blocks(user_id)
 
     @Post("/", response_model=StoryBlockOutDto)
     @validate_token

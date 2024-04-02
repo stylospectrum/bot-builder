@@ -1,6 +1,6 @@
 import uuid
 
-from sqlmodel import Field, SQLModel, Relationship
+from sqlmodel import Field, SQLModel, Relationship, Column, UUID, ForeignKey
 from datetime import datetime
 from typing import Optional, TYPE_CHECKING
 
@@ -13,7 +13,9 @@ class BotResponseGalleryItem(SQLModel, table=True):
     __tablename__ = "bot_response_gallery_item"
 
     id: Optional[uuid.UUID] = Field(default_factory=uuid.uuid4, primary_key=True)
-    bot_response_id: uuid.UUID = Field(foreign_key="bot_response.id")
+    bot_response_id: uuid.UUID = Field(
+        sa_column=Column(UUID, ForeignKey("bot_response.id", ondelete="CASCADE"))
+    )
     title: str = Field(nullable=False)
     description: str = Field(nullable=False)
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
@@ -24,5 +26,7 @@ class BotResponseGalleryItem(SQLModel, table=True):
         back_populates="gallery_item",
         sa_relationship_kwargs=dict(
             order_by="BotResponseButton.updated_at",
+            cascade="delete",
+            passive_deletes=True
         ),
     )

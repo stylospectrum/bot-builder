@@ -6,6 +6,7 @@ from .schemas.bot_response_schema import BotResponse
 from .schemas.bot_response_text_schema import BotResponseText
 from .schemas.bot_response_button_schema import BotResponseButton
 from .schemas.bot_response_gallery_item_schema import BotResponseGalleryItem
+from .schemas.bot_response_button_expr_schema import BotResponseButtonExpr
 from .dto.create_bot_response_dto import CreateBotResponseBaseDto
 from .dto.bot_response_out_dto import BotResponseOutDto
 
@@ -50,17 +51,21 @@ class BotResponsesService:
                 ]
 
                 for gallery_item in bot_response_out.gallery:
-                    file_response: GetFileResponse = self.file_service_stub.GetFile(
-                        GetFileRequest(owner_id=str(gallery_item["id"]))
-                    )
+                    if gallery_item["id"]:
+                        file_response: GetFileResponse = self.file_service_stub.GetFile(
+                            GetFileRequest(owner_id=str(gallery_item["id"]))
+                        )
 
-                    gallery_item["image_url"] = file_response.url
+                        gallery_item["image_url"] = file_response.url
 
             result.append(bot_response_out)
 
         return result
 
     def handle_image_block(self, block, owner_id: str):
+        if not block["image_id"]:
+            return
+
         if block["deleted"]:
             self.file_service_stub.DeleteFile(DeleteFileRequest(owner_id=str(owner_id)))
         else:
@@ -70,35 +75,7 @@ class BotResponsesService:
                 )
             )
 
-    def handle_gallery_block(self, block, bot_response):
-        if block["deleted"]:
-            self.delete_gallery_items(bot_response.id)
-        else:
-            self.add_or_update_gallery_items(block["gallery"], bot_response.id)
-
-    def delete_gallery_items(self, bot_response_id):
-        gallery_item_ids = self.session.exec(
-            select(BotResponseGalleryItem.id).where(
-                BotResponseGalleryItem.bot_response_id == bot_response_id
-            )
-        ).all()
-
-        if gallery_item_ids:
-            self.session.exec(
-                delete(BotResponseButton).where(
-                    BotResponseButton.gallery_item_id.in_(gallery_item_ids)
-                )
-            )
-
-        self.session.exec(
-            delete(BotResponseGalleryItem).where(
-                BotResponseGalleryItem.bot_response_id == bot_response_id
-            )
-        )
-
-        self.session.commit()
-
-    def add_or_update_gallery_items(self, gallery_raw, bot_response_id):
+    def handle_gallery_items(self, gallery_raw, bot_response_id):
         existing_gallery_items = {
             item.id: item
             for item in self.session.exec(
@@ -113,11 +90,6 @@ class BotResponsesService:
 
             if gallery_item_raw.get("deleted", False):
                 if gallery_item_raw["id"] in existing_gallery_items:
-                    self.session.exec(
-                        delete(BotResponseButton).where(
-                            BotResponseButton.gallery_item_id == gallery_item_raw["id"]
-                        )
-                    )
                     self.session.delete(existing_gallery_items[gallery_item_raw["id"]])
             elif gallery_item_raw["id"] is None:
                 new_gallery_item = BotResponseGalleryItem(
@@ -126,8 +98,7 @@ class BotResponsesService:
                     description=gallery_item_raw["description"],
                 )
                 self.session.add(new_gallery_item)
-                self.session.commit()
-                self.add_or_update_buttons(
+                self.handle_buttons(
                     gallery_item_raw.get("buttons", []),
                     new_gallery_item.id,
                     "GalleryItem",
@@ -139,7 +110,7 @@ class BotResponsesService:
                     existing_item.title = gallery_item_raw["title"]
                     existing_item.description = gallery_item_raw["description"]
                     existing_item.updated_at = datetime.utcnow()
-                    self.add_or_update_buttons(
+                    self.handle_buttons(
                         gallery_item_raw.get("buttons", []),
                         gallery_item_raw["id"],
                         "GalleryItem",
@@ -147,18 +118,29 @@ class BotResponsesService:
             self.handle_image_block(gallery_item_raw, gallery_item_id)
         self.session.commit()
 
-    def handle_quick_reply_block(self, block, bot_response):
-        if block["deleted"]:
-            self.session.exec(
-                delete(BotResponseButton).where(
-                    BotResponseButton.bot_response_id == bot_response.id
+    def handle_button_exprs(self, exprs_raw, button_id):
+        for expr_raw in exprs_raw:
+            if expr_raw["id"] is None:
+                expr = BotResponseButtonExpr(
+                    button_id=button_id,
+                    value=expr_raw["value"],
+                    variable_id=expr_raw["variable_id"],
                 )
-            )
+                self.session.add(expr)
+            else:
+                expr = self.session.exec(
+                    select(BotResponseButtonExpr).where(
+                        BotResponseButtonExpr.id == expr_raw["id"]
+                    )
+                ).first()
+                if expr_raw["deleted"]:
+                    self.session.delete(expr)
+                else:
+                    expr.value = expr_raw["value"]
+                    expr.variable_id = expr_raw["variable_id"]
             self.session.commit()
-        else:
-            self.add_or_update_buttons(block["buttons"], bot_response.id, "QuickReply")
 
-    def add_or_update_buttons(self, buttons_raw, parent_id: str, parent_type):
+    def handle_buttons(self, buttons_raw, parent_id: str, parent_type):
         for button_raw in buttons_raw:
             if button_raw["id"] is None:
                 button = BotResponseButton(
@@ -168,6 +150,7 @@ class BotResponsesService:
                     go_to=button_raw["go_to"],
                 )
                 self.session.add(button)
+                self.handle_button_exprs(button_raw.get("exprs", []), button.id)
             else:
                 button = self.session.exec(
                     select(BotResponseButton).where(
@@ -180,20 +163,10 @@ class BotResponsesService:
                     button.content = button_raw["content"]
                     button.go_to = button_raw["go_to"]
                     button.updated_at = datetime.utcnow()
+                    self.handle_button_exprs(button_raw.get("exprs", []), button_raw["id"])
             self.session.commit()
 
-    def handle_text_variants_block(self, block, bot_response):
-        if block["deleted"]:
-            self.session.exec(
-                delete(BotResponseText).where(
-                    BotResponseText.bot_response_id == bot_response.id
-                )
-            )
-            self.session.commit()
-        else:
-            self.add_or_update_text_variants(block["variants"], bot_response.id)
-
-    def add_or_update_text_variants(self, variants_raw, bot_response_id):
+    def handle_text_variants(self, variants_raw, bot_response_id):
         for variant_raw in variants_raw:
             if variant_raw["id"] is None:
                 variant = BotResponseText(
@@ -242,28 +215,21 @@ class BotResponsesService:
             if block["type"] == BotResponseType.Image:
                 self.handle_image_block(block, bot_response.id)
             elif block["type"] == BotResponseType.Gallery:
-                self.handle_gallery_block(block, bot_response)
+                self.handle_gallery_items(block.get("gallery", []), bot_response.id)
             elif block["type"] == BotResponseType.QuickReply:
-                self.handle_text_variants_block(block, bot_response)
-                self.handle_quick_reply_block(block, bot_response)
+                self.handle_text_variants(block.get("variants", []), bot_response.id)
+                self.handle_buttons(
+                    block["buttons"], bot_response.id, "QuickReply"
+                )
             elif block["type"] in [BotResponseType.RandomText, BotResponseType.Text]:
-                self.handle_text_variants_block(block, bot_response)
+                self.handle_text_variants(block.get("variants", []), bot_response.id)
 
             self.finalize_bot_response(block, bot_response)
         return True
-
+    
     def delete(self, story_block_id: str):
-        bot_response = self.session.exec(
-            select(BotResponse).where(BotResponse.story_block_id == story_block_id)
-        ).first()
-
-        if bot_response:
-            self.session.exec(
-                delete(BotResponseText).where(
-                    BotResponseText.bot_response_id == bot_response.id
-                )
-            )
-            self.session.delete(bot_response)
-            self.session.commit()
-
+        self.session.exec(
+            delete(BotResponse).where(BotResponse.story_block_id == story_block_id)
+        )
+        self.session.commit()
         return True

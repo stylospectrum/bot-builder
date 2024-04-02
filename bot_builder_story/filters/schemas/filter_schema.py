@@ -1,20 +1,25 @@
 import uuid
 
-from sqlmodel import Field, SQLModel, Enum, Relationship
+from sqlmodel import Field, SQLModel, Enum, Relationship, Column, UUID, ForeignKey
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from ..enum import FilterOperator
+
+if TYPE_CHECKING:
+    from ...story_blocks.schemas.story_block_schema import StoryBlock
 
 
 class Filter(SQLModel, table=True):
     __tablename__ = "filter"
 
     id: Optional[uuid.UUID] = Field(default_factory=uuid.uuid4, primary_key=True)
-    attribute: Optional[str]
+    variable_id: Optional[str]
     value: Optional[str]
     operator: FilterOperator = Enum(FilterOperator)
-    story_block_id: str
+    story_block_id: uuid.UUID = Field(
+        sa_column=Column(UUID, ForeignKey("story_block.id", ondelete="CASCADE"))
+    )
     parent_id: Optional[uuid.UUID] = Field(foreign_key="filter.id")
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
@@ -25,9 +30,14 @@ class Filter(SQLModel, table=True):
             order_by="Filter.created_at",
         ),
     )
+
     sub_exprs: list["Filter"] = Relationship(
         back_populates="parent",
         sa_relationship_kwargs=dict(
             order_by="Filter.created_at",
         ),
+    )
+
+    story_block: Optional["StoryBlock"] = Relationship(
+        back_populates="filter",
     )

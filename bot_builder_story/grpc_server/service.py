@@ -15,6 +15,8 @@ from ..bot_responses.dto.bot_response_out_dto import BotResponseOutDto
 from ..bot_responses.enum import BotResponseType
 from ..filters.schemas.filter_schema import Filter
 from ..filters.dto.filter_out_dto import FilterOutDto
+from ..user_inputs.schemas.user_input_schema import UserInput
+from ..user_inputs.dto.user_input_out_dto import UserInputOutDto
 from ..config.settings import settings
 
 
@@ -77,8 +79,22 @@ class BotBuilderStoryServicer(
                     buttons = []
 
                     for button in gallery_item["buttons"]:
+                        exprs = []
+
+                        for expr in button["exprs"]:
+                            exprs.append(
+                                {
+                                    "variable_id": expr["variable_id"],
+                                    "value": expr["value"],
+                                }
+                            )
+
                         buttons.append(
-                            {"content": button["content"], "go_to": button["go_to"]}
+                            {
+                                "content": button["content"],
+                                "go_to": button["go_to"],
+                                "exprs": exprs,
+                            }
                         )
 
                     gallery.append(
@@ -124,3 +140,20 @@ class BotBuilderStoryServicer(
                 )
 
             return bot_builder_story_pb2.GetFiltersResponse(filters=result)
+
+    def GetUserInputs(self, request, context):
+        with Session(engine) as session:
+            inputs = session.exec(
+                select(UserInput).where(UserInput.story_block_id == request.story_block_id)
+            ).all()
+
+            result = []
+
+            for input in inputs:
+                result.append(
+                    {
+                        "content": input.content,
+                    }
+                )
+
+            return bot_builder_story_pb2.GetUserInputsResponse(inputs=result)
