@@ -18,10 +18,12 @@ class GetUserInputsResponse(_message.Message):
     def __init__(self, inputs: _Optional[_Iterable[_Union[UserInput, _Mapping]]] = ...) -> None: ...
 
 class UserInput(_message.Message):
-    __slots__ = ("content",)
+    __slots__ = ("content", "id")
     CONTENT_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
     content: str
-    def __init__(self, content: _Optional[str] = ...) -> None: ...
+    id: str
+    def __init__(self, content: _Optional[str] = ..., id: _Optional[str] = ...) -> None: ...
 
 class GetFiltersRequest(_message.Message):
     __slots__ = ("story_block_ids",)

@@ -19,6 +19,7 @@ message GetUserInputsResponse {
 
 message UserInput {
   string content = 1;
+  string id = 2;
 }
 
 message GetFiltersRequest {

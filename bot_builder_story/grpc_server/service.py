@@ -153,6 +153,7 @@ class BotBuilderStoryServicer(
                 result.append(
                     {
                         "content": input.content,
+                        "id": str(input.id),
                     }
                 )
 

@@ -39,7 +39,7 @@ class StoryBlocksService:
         for child in parent.children:
             r.extend(self.nodes_from_tree(child))
         return r
-    
+
     def find_user_input_blocks(self, user_id: str):
         return self.session.exec(
             select(StoryBlock).where(
@@ -144,9 +144,10 @@ class StoryBlocksService:
         ).all()
         new_block = self.create_base(CreateStoryBlockDto(**params))
 
-        if len(subsequent_blocks) > 0 and (
-            subsequent_blocks[0].type == StoryBlockType.BotResponse
-            or params["type"] == StoryBlockType.BotResponse
+        if (
+            len(subsequent_blocks) > 0
+            and subsequent_blocks[0].type == StoryBlockType.BotResponse
+            and params["type"] == StoryBlockType.Filter
         ):
             for block in subsequent_blocks:
                 block.parent_id = new_block.id

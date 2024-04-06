@@ -39,7 +39,7 @@ class UserInputsService:
                 self.session.exec(
                     delete(UserInput).where(UserInput.id == user_input_raw["id"])
                 )
-                delete_embeds.append(user_input_raw["id"])
+                delete_embeds.append(str(user_input_raw["id"]))
             elif user_input_raw["id"]:
                 user_input = self.session.exec(
                     select(UserInput).where(UserInput.id == user_input_raw["id"])
